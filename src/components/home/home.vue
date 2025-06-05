@@ -3,6 +3,6 @@
 <template>
   <main>
     home
-    <a href="/transactions">transactions</a>
+    <a href="/transactions">TRACK</a>
   </main>
 </template>

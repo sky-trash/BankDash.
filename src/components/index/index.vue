@@ -1,8 +1,19 @@
 <script setup>
-import Board from "../layout/board/board.vue"
+import Dash from "../layout/dash/dash.vue"
+import Header from "../layout/header/header.vue"
 import Home from "../home/home.vue"
 </script>
 <template>
-  <Board/>
-  <Home/>
+  <main>
+    <Dash />
+    <div>
+      <Header />
+      <Home />
+    </div>
+  </main>
 </template>
+<style>
+main {
+  display: flex;
+}
+</style>
