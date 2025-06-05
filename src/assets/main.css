@@ -8,6 +8,7 @@
 html,
 body {
   height: 100%;
+  background-color: rgb(230, 230, 230);
 }
 body {
   font-family: "SF Pro Display", sans-serif;

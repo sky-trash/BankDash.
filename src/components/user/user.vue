@@ -10,7 +10,7 @@ import Home from "../home/home.vue"
     <div class="content-area">
       <Header />
       <main class="main-content">
-        <Home />
+        user
       </main>
     </div>
   </div>
@@ -46,4 +46,7 @@ import Home from "../home/home.vue"
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
+</style>
+<style scoped lang="scss">
+@import './user.scss';
 </style>

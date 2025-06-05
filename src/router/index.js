@@ -9,15 +9,50 @@ const router = createRouter({
       alias: ["/home", "/main"] // Добавляем алиасы для главной
     },
     {
-      path: "/transactions",
-      name: "transactions",
-      component: () => import("../pages/transactions.vue"),
+      path: "/transfer",
+      name: "transfer",
+      component: () => import("../pages/transfer.vue"),
       meta: {
         requiresUnauth: true,
         title: "Транзакции" // Мета-данные для заголовка
       }
     },
-    
+    {
+      path: "/user",
+      name: "user",
+      component: () => import("../pages/user.vue"),
+      meta: {
+        requiresUnauth: true,
+        title: "Аккаунт" // Мета-данные для заголовка
+      }
+    },
+    {
+      path: "/investment",
+      name: "investment",
+      component: () => import("../pages/investment.vue"),
+      meta: {
+        requiresUnauth: true,
+        title: "Инвестиции" // Мета-данные для заголовка
+      }
+    },
+    {
+      path: "/credit",
+      name: "credit",
+      component: () => import("../pages/credit.vue"),
+      meta: {
+        requiresUnauth: true,
+        title: "Кредит" // Мета-данные для заголовка
+      }
+    },
+    {
+      path: "/settings",
+      name: "settings",
+      component: () => import("../pages/settings.vue"),
+      meta: {
+        requiresUnauth: true,
+        title: "Настройки" // Мета-данные для заголовка
+      }
+    },
     // {
     //   path: "/:pathMatch(.*)*", // Более надежный обработчик 404
     //   name: "not-found",
