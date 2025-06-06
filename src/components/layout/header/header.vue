@@ -1,10 +1,12 @@
 <script setup lang="ts">
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { computed } from 'vue';
+import { getAuth, signOut } from 'firebase/auth';
 
 const route = useRoute();
+const router = useRouter();
+const auth = getAuth();
 
-// Карта соответствий путей и названий
 const pageTitles = {
   '/': 'Главная',
   '/transfer': 'Транзакции',
@@ -14,11 +16,21 @@ const pageTitles = {
   '/settings': 'Настройки'
 };
 
-// Получаем название текущей страницы
 const currentPageTitle = computed(() => {
   const basePath = route.path.split('/')[1];
   return pageTitles[`/${basePath}`] || 'Главная';
 });
+
+const logout = async () => {
+  try {
+    await signOut(auth);
+    // Перенаправляем на страницу входа после выхода
+    router.push('/login');
+  } catch (error) {
+    console.error('Ошибка при выходе:', error);
+    // Можно добавить уведомление об ошибке
+  }
+};
 </script>
 
 <template>
@@ -46,6 +58,11 @@ const currentPageTitle = computed(() => {
           <img src="../../../../public/header/cabinet.svg" alt="">
         </button>
       </router-link>
+      <div class="header__content__cabinet">
+        <button @click="logout">
+          <img src="../../../../public/header/cabinet.svg" alt="Выход">
+        </button>
+      </div>
     </div>
   </header>
 </template>

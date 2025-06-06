@@ -1,0 +1,29 @@
+.cards {
+  padding: 25px;
+  width: 730px;
+  height: 282px;  
+
+  &__all {
+    display: flex;
+    justify-content: space-between;
+
+    h1 {
+      font-family: var(--font-family);
+      font-weight: 600;
+      font-size: 22px;
+      color: var(--primary-2);
+    }
+  }
+  &__chip {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px 0 0;
+
+    &__cards {
+      border-radius: 25px;
+      width: 350px;
+      height: 235px;
+      background: linear-gradient(136deg, #4c49ed 0%, #0a06f4 100%);      
+    }
+  }
+}

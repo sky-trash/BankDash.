@@ -1,77 +1,127 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { auth } from '@/firebase'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      path: "/",
-      component: () => import("../pages/index.vue"),
-      alias: ["/home", "/main"] // Добавляем алиасы для главной
+      path: '/',
+      redirect: '/login'
     },
     {
-      path: "/transfer",
-      name: "transfer",
-      component: () => import("../pages/transfer.vue"),
+      path: '/login',
+      name: 'login',
+      component: () => import('../pages/login.vue'),
       meta: {
-        requiresUnauth: true,
-        title: "Транзакции" // Мета-данные для заголовка
+        title: 'Login',
+        requiresUnauth: true
       }
     },
     {
-      path: "/user",
-      name: "user",
-      component: () => import("../pages/user.vue"),
+      path: '/register',
+      name: 'register',
+      component: () => import('../pages/register.vue'),
       meta: {
-        requiresUnauth: true,
-        title: "Аккаунт" // Мета-данные для заголовка
+        title: 'Register',
+        requiresUnauth: true
       }
     },
     {
-      path: "/investment",
-      name: "investment",
-      component: () => import("../pages/investment.vue"),
+      path: '/index',
+      name: 'index',
+      component: () => import('../pages/index.vue'),
       meta: {
-        requiresUnauth: true,
-        title: "Инвестиции" // Мета-данные для заголовка
+        title: 'index',
+        requiresAuth: true
       }
     },
     {
-      path: "/credit",
-      name: "credit",
-      component: () => import("../pages/credit.vue"),
+      path: '/transfer',
+      name: 'transfer',
+      component: () => import('../pages/transfer.vue'),
       meta: {
-        requiresUnauth: true,
-        title: "Кредит" // Мета-данные для заголовка
+        title: 'Переводы',
+        requiresAuth: true,
+        icon: 'transfer'
       }
     },
     {
-      path: "/settings",
-      name: "settings",
-      component: () => import("../pages/settings.vue"),
+      path: '/user',
+      name: 'user',
+      component: () => import('../pages/user.vue'),
       meta: {
-        requiresUnauth: true,
-        title: "Настройки" // Мета-данные для заголовка
+        title: 'Мой профиль',
+        requiresAuth: true,
+        icon: 'user'
       }
     },
-    // {
-    //   path: "/:pathMatch(.*)*", // Более надежный обработчик 404
-    //   name: "not-found",
-    //   component: () => import("../pages/NotFound.vue"),
-    //   meta: {
-    //     title: "Страница не найдена"
-    //   }
-    // }
+    {
+      path: '/investment',
+      name: 'investment',
+      component: () => import('../pages/investment.vue'),
+      meta: {
+        title: 'Инвестиции',
+        requiresAuth: true,
+        icon: 'investment'
+      }
+    },
+    {
+      path: '/credit',
+      name: 'credit',
+      component: () => import('../pages/credit.vue'),
+      meta: {
+        title: 'Кредиты',
+        requiresAuth: true,
+        icon: 'credit'
+      }
+    },
+    {
+      path: '/settings',
+      name: 'settings',
+      component: () => import('../pages/settings.vue'),
+      meta: {
+        title: 'Настройки',
+        requiresAuth: true,
+        icon: 'settings'
+      }
+    },
+    {
+      path: '/:pathMatch(.*)*', // Перехват 404
+      redirect: '/dashboard' // Перенаправление на главную
+    }
   ],
   scrollBehavior(to, from, savedPosition) {
     if (to.hash) {
-      return { el: to.hash, behavior: 'smooth' }
+      return {
+        el: to.hash,
+        behavior: 'smooth',
+        top: 100 // Отступ сверху для фиксированного header'а
+      }
     }
-    if (savedPosition) {
-      return savedPosition
-    }
-    return { top: 0 }
+    return savedPosition || { top: 0 }
   }
 })
 
+// Глобальная проверка авторизации
+router.beforeEach(async (to, from, next) => {
+  await auth.authStateReady() // Ждем инициализации auth
+  const user = auth.currentUser
+  const requiresAuth = to.matched.some(r => r.meta.requiresAuth)
+  const requiresUnauth = to.matched.some(r => r.meta.requiresUnauth)
+
+  // Установка заголовка
+  document.title = to.meta.title 
+    ? `${to.meta.title} | Банковская система` 
+    : 'Банковская система'
+
+  if (requiresAuth && !user) {
+    // Сохраняем исходный путь для редиректа после входа
+    next({ name: 'login', query: { redirect: to.fullPath !== '/' ? to.fullPath : undefined }})
+  } else if (requiresUnauth && user) {
+    next({ name: 'index' }) // Авторизованных отправляем на главную
+  } else {
+    next() // Разрешаем переход
+  }
+})
 
 export default router
