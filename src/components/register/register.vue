@@ -14,6 +14,7 @@ const password = ref('')
 const confirmPassword = ref('')
 const error = ref('')
 const router = useRouter()
+const loading = ref(false)
 
 const handleRegister = async () => {
   if (password.value !== confirmPassword.value) {
@@ -120,10 +121,10 @@ const handleRegister = async () => {
         </div>
       </div>
       
-      <button type="submit" class="auth-button">Зарегистрироваться</button>
+      <button type="submit" class="auth-button">{{ loading ? 'Загрузка...' : 'Зарегистрироваться' }}</button>
       
       <p class="auth-link">
-        Уже есть аккаунт? <router-link to="/login">Войдите</router-link>
+        Уже есть аккаунт? <router-link to="/login">Войти</router-link>
       </p>
       
       <p v-if="error" class="error-message">{{ error }}</p>
@@ -132,94 +133,5 @@ const handleRegister = async () => {
 </template>
 
 <style scoped>
-.auth-container {
-  max-width: 800px;
-  margin: 2rem auto;
-  padding: 2rem;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  background: white;
-}
-
-.auth-form {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
-
-.form-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1rem;
-}
-
-.form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.form-group label {
-  font-weight: 500;
-  color: #333;
-}
-
-.form-group input {
-  padding: 0.75rem;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 1rem;
-  width: 100%;
-}
-
-.auth-button {
-  padding: 0.75rem;
-  background-color: #4CAF50;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 1rem;
-  font-weight: 500;
-  transition: background-color 0.3s;
-  margin-top: 1rem;
-}
-
-.auth-button:hover {
-  background-color: #45a049;
-}
-
-.auth-link {
-  text-align: center;
-  margin-top: 1rem;
-  color: #666;
-}
-
-.auth-link a {
-  color: #4CAF50;
-  text-decoration: none;
-}
-
-.error-message {
-  color: #f44336;
-  text-align: center;
-  margin-top: 1rem;
-}
-
-h1 {
-  text-align: center;
-  color: #333;
-  margin-bottom: 1.5rem;
-}
-
-@media (max-width: 768px) {
-  .form-row {
-    grid-template-columns: 1fr;
-  }
-  
-  .auth-container {
-    padding: 1rem;
-    margin: 1rem;
-  }
-}
+@import "./register.scss";
 </style>
