@@ -1,7 +1,9 @@
 <script setup>
 import Dash from "../layout/dash/dash.vue"
 import Header from "../layout/header/header.vue"
-import Home from "../home/home.vue"
+import Balanse from "../total/balanse.vue"
+import Expense from "../total/expense.vue"
+import Income from "../total/income.vue"
 </script>
 
 <template>
@@ -9,14 +11,19 @@ import Home from "../home/home.vue"
     <Dash />
     <div class="content-area">
       <Header />
-      <main class="main-content">
-        user
+      <main class="user__content">
+        <div class="user__content__total">
+          <Balanse />
+          <Expense />
+          <Income />
+        </div>
       </main>
     </div>
   </div>
 </template>
+<style scoped lang="scss">
+@import './user.scss';
 
-<style scoped>
 .app-container {
   display: flex;
   min-height: 100vh;
@@ -35,7 +42,8 @@ import Home from "../home/home.vue"
 
 .content-area {
   flex: 1;
-  margin-left: 249px; /* Ширина бокового меню */
+  margin-left: 249px;
+  /* Ширина бокового меню */
 }
 
 .header {
@@ -43,10 +51,6 @@ import Home from "../home/home.vue"
   top: 0;
   z-index: 5;
   background: #fff;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
-
-</style>
-<style scoped lang="scss">
-@import './user.scss';
 </style>

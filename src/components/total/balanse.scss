@@ -1,0 +1,31 @@
+.total {
+  margin: 15px;
+
+  &__content {
+    width: 255px;
+    height: 120px;
+    border-radius: 25px;
+    background: #fff;
+    padding: 25px 36px;
+    display: flex;
+
+    &__text {
+      padding: 7px 0 7px 15px;
+
+      p {
+        font-family: var(--font-family);
+        font-weight: 400;
+        font-size: 16px;
+        color: #718ebf;
+      }
+      h1 {
+        font-family: var(--font-family);
+        font-weight: 600;
+        font-size: 25px;
+        color: #232323;
+        
+        padding-top: 7px;
+      }
+    }
+  }
+}
