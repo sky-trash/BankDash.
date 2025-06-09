@@ -1,0 +1,164 @@
+.transferMoney {
+  margin: 15px;
+
+  &__content {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 25px 36px;
+    height: 120px;
+    border-radius: 25px;
+    background: #fff;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+
+    &__text {
+
+      h1 {
+        margin: 0;
+        font-size: 18px;
+        color: #232323;
+      }
+    }
+  }
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal {
+  position: relative;
+  background: white;
+  border-radius: 12px;
+  padding: 30px;
+  max-width: 500px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+
+  &-close {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    font-size: 24px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #777;
+    transition: color 0.2s;
+
+    &:hover {
+      color: #333;
+    }
+  }
+}
+
+.transfer-form {
+  h2 {
+    margin-top: 0;
+    color: #2c3e50;
+    text-align: center;
+    margin-bottom: 25px;
+  }
+}
+
+.user-card-info {
+  background: #f8f9fa;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+
+  h3 {
+    margin-top: 0;
+    color: #2c3e50;
+    font-size: 16px;
+  }
+
+  p {
+    margin: 5px 0;
+    color: #555;
+  }
+}
+
+.form-group {
+  margin-bottom: 20px;
+
+  label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #2c3e50;
+    font-size: 14px;
+  }
+
+  input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 16px;
+    transition: border-color 0.3s;
+
+    &:focus {
+      border-color: #42b983;
+      outline: none;
+    }
+  }
+}
+
+.transfer-button {
+  width: 100%;
+  padding: 14px;
+  background-color: #42b983;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s;
+
+  &:hover:not(:disabled) {
+    background-color: #3aa876;
+  }
+
+  &:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+  }
+}
+
+.error-message {
+  color: #e74c3c;
+  padding: 12px;
+  background-color: #fdecea;
+  border-radius: 6px;
+  margin-bottom: 20px;
+  font-size: 14px;
+}
+
+.success-message {
+  color: #2ecc71;
+  padding: 12px;
+  background-color: #e8f8f0;
+  border-radius: 6px;
+  margin-bottom: 20px;
+  font-size: 14px;
+}

@@ -55,12 +55,12 @@ const logout = async () => {
       </div>
       <router-link to="/user" class="header__content__cabinet">
         <button>
-          <img src="../../../../public/header/cabinet.svg" alt="">
+          <img src="" alt="кабинет">
         </button>
       </router-link>
       <div class="header__content__cabinet">
         <button @click="logout">
-          <img src="../../../../public/header/cabinet.svg" alt="Выход">
+          <img src="" alt="Выход">
         </button>
       </div>
     </div>

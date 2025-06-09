@@ -2,7 +2,8 @@
 import Dash from "../layout/dash/dash.vue"
 import Header from "../layout/header/header.vue"
 import Cards from "../cards/cards.vue";
-import MoneyTransfer from "../money/MoneyTransfer.vue"; // Исправленный путь
+import TransferMoney from "../button/transferMoney.vue";
+import Balanse from "../total/balanse.vue";
 </script>
 
 <template>
@@ -13,9 +14,10 @@ import MoneyTransfer from "../money/MoneyTransfer.vue"; // Исправленн�
       <main class="transfer">
         <div class="transfer__cards">
           <Cards/>
-        </div>
-        <div class="transfer__form">
-          <MoneyTransfer/>
+          <div class="transfer__cards__money">
+            <Balanse/>
+            <TransferMoney/>
+          </div>
         </div>
       </main>
     </div>

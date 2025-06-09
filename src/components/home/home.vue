@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import Cards from "../cards/cards.vue"
-
+import Cards from '../cards/cards.vue'
 
 import { useRouter } from 'vue-router'
 import { signOut } from 'firebase/auth'
