@@ -23,7 +23,7 @@
       h1 {
         margin: 0;
         font-size: 18px;
-        color: #232323;
+        color: #b1b1b1;
       }
     }
   }
@@ -126,7 +126,7 @@
 .transfer-button {
   width: 100%;
   padding: 14px;
-  background-color: #42b983;
+  background-color: #1814f3;
   color: white;
   border: none;
   border-radius: 6px;
@@ -136,7 +136,7 @@
   transition: background-color 0.3s;
 
   &:hover:not(:disabled) {
-    background-color: #3aa876;
+    background-color: var(--primary-2);
   }
 
   &:disabled {

@@ -4,6 +4,7 @@ import Header from "../layout/header/header.vue"
 import Cards from "../cards/cards.vue";
 import TransferMoney from "../button/transferMoney.vue";
 import Balanse from "../total/balanse.vue";
+import LastHistory from "../history/lastHistory.vue";
 </script>
 
 <template>
@@ -18,6 +19,9 @@ import Balanse from "../total/balanse.vue";
             <Balanse/>
             <TransferMoney/>
           </div>
+        </div>
+        <div>
+          <LastHistory/>
         </div>
       </main>
     </div>
