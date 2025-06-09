@@ -1,7 +1,8 @@
 <script setup>
 import Dash from "../layout/dash/dash.vue"
 import Header from "../layout/header/header.vue"
-import Home from "../home/home.vue"
+import Cards from "../cards/cards.vue";
+import MoneyTransfer from "../money/MoneyTransfer.vue"; // Исправленный путь
 </script>
 
 <template>
@@ -9,8 +10,13 @@ import Home from "../home/home.vue"
     <Dash />
     <div class="content-area">
       <Header />
-      <main class="main-content">
-        trans
+      <main class="transfer">
+        <div class="transfer__cards">
+          <Cards/>
+        </div>
+        <div class="transfer__form">
+          <MoneyTransfer/>
+        </div>
       </main>
     </div>
   </div>

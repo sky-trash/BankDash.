@@ -122,6 +122,8 @@ const handleRegister = async () => {
       cardHolder: cardHolderName,
       validThru: generateValidThru(),
       balance: 100,
+      expense: null,
+      income: null,
       cvv: Math.floor(100 + Math.random() * 900).toString(),
       userId: userCredential.user.uid,
       createdAt: serverTimestamp(),
