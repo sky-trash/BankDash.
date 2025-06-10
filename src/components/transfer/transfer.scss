@@ -5,8 +5,25 @@
     display: flex;
 
     &__money {
-      display: flex;
-      padding: 30px;
+      margin-left: 20px;
+
+      &__text {
+
+        h1 {
+          font-family: var(--font-family);
+          font-weight: 600;
+          font-size: 22px;
+          color: #333b69;
+        }
+      }
+      &__import {
+        display: flex;
+        margin: -10px;
+        padding-top: 15px;
+      }
     }
+  }
+  &__lastHistory {
+    padding: 20px 0;
   }
 }

@@ -33,6 +33,18 @@ onMounted(async () => {
     console.error("Ошибка при получении транзакций:", error)
   }
 })
+
+// Функция для форматирования даты
+const formatDate = (dateString) => {
+  const options = { day: 'numeric', month: 'short', year: 'numeric' }
+  const date = new Date(dateString)
+  return date.toLocaleDateString('ru-RU', options)
+}
+
+// Функция для форматирования номера карты
+const formatCardNumber = (cardNumber) => {
+  return cardNumber.replace(/\d{4}(?= \d{4})/g, '****')
+}
 </script>
 
 <template>
@@ -41,40 +53,68 @@ onMounted(async () => {
       <div class="lastHistory__content__text">
         <h1>Последние транзакции</h1>
       </div>
-      <div class="lastHistory__content__table">
-        <table>
-          <thead>
-            <tr>
-              <th>Описание</th>
-              <th>Категория</th>
-              <th>Карта</th>
-              <th>Статус</th>
-              <th>Сумма</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="transaction in transactions" :key="transaction.id">
-              <td>{{ transaction.description }}</td>
-              <td>{{ transaction.category }}</td>
-              <td>{{ transaction.card }}</td>
-              <td :class="{
-                'status-pending': transaction.status === 'Pending',
-                'status-completed': transaction.status === 'Completed'
-              }">
-                {{ transaction.status }}
-              </td>
-              <td :class="{
-                'amount-negative': transaction.amount < 0,
-                'amount-positive': transaction.amount > 0
-              }">
-                {{ transaction.amount > 0 ? '+' : '' }}{{ transaction.amount }}$
-              </td>
-            </tr>
-            <tr v-if="transactions.length === 0">
-              <td colspan="5">Нет транзакций</td>
-            </tr>
-          </tbody>
-        </table>
+      <div class="lastHistory__content__cards">
+        <!-- Статический пример карточки (можно удалить) -->
+        <div class="lastHistory__content__cards__info" v-if="transactions.length === 0">
+          <div class="lastHistory__content__cards__info__image">
+            <img src="../../../public/total/history.svg" alt="История">
+          </div>
+          <div class="lastHistory__content__cards__info__text">
+            <h1>Денежный перевод</h1>
+            <p>25 Янв 2025</p>
+          </div>
+          <div class="lastHistory__content__cards__info__transfer">
+            <p>Перевод</p>
+          </div>
+          <div class="lastHistory__content__cards__info__number">
+            <p>**** 2324</p>
+          </div>
+          <div class="lastHistory__content__cards__info__status">
+            <p>Выполнено</p>
+          </div>
+          <div class="lastHistory__content__cards__info__money">
+            <p>-40$</p>
+          </div>
+        </div>
+        
+        <!-- Динамические карточки транзакций -->
+        <div 
+          class="lastHistory__content__cards__info" 
+          v-for="transaction in transactions" 
+          :key="transaction.id"
+        >
+          <div class="lastHistory__content__cards__info__image">
+            <img src="../../../public/total/history.svg" alt="">
+          </div>
+          <div class="lastHistory__content__cards__info__text">
+            <h1>Первод денежных средств</h1>
+            <p>{{ formatDate(transaction.date) }}</p>
+          </div>
+          <div class="lastHistory__content__cards__info__transfer">
+            <p>Перевод</p>
+          </div>
+          <div class="lastHistory__content__cards__info__number">
+            <p>{{ formatCardNumber(transaction.card) }}</p>
+          </div>
+          <div 
+            class="lastHistory__content__cards__info__status"
+            :class="{
+              'status-completed': transaction.status === 'Completed',
+              'status-pending': transaction.status === 'Pending'
+            }"
+          >
+            <p>{{ transaction.status }}</p>
+          </div>
+          <div 
+            class="lastHistory__content__cards__info__money"
+            :class="{
+              'money-positive': transaction.amount > 0,
+              'money-negative': transaction.amount < 0
+            }"
+          >
+            <p>{{ transaction.amount > 0 ? '+' : '' }}{{ transaction.amount }}$</p>
+          </div>
+        </div>
       </div>
     </div>
   </main>

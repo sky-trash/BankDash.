@@ -16,11 +16,16 @@ import LastHistory from "../history/lastHistory.vue";
         <div class="transfer__cards">
           <Cards/>
           <div class="transfer__cards__money">
-            <Balanse/>
-            <TransferMoney/>
+            <div class="transfer__cards__money__text">
+              <h1>Оплатить или превести</h1>
+            </div>
+            <div class="transfer__cards__money__import">
+              <Balanse/>
+              <TransferMoney/>
+            </div>
           </div>
         </div>
-        <div>
+        <div class="transfer__lastHistory">
           <LastHistory/>
         </div>
       </main>

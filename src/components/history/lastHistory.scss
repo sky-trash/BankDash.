@@ -1,70 +1,79 @@
-
 .lastHistory {
-  width: 100%;
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 20px;
-  font-family: 'Arial', sans-serif;
 
   &__content {
-    background: white;
-    border-radius: 10px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    padding: 20px;
 
     &__text {
-      margin-bottom: 20px;
 
       h1 {
-        font-size: 20px;
+        font-family: var(--font-family);
         font-weight: 600;
-        color: #333;
-        margin: 0;
+        font-size: 22px;
+        color: #333b69;
       }
     }
+    &__cards {
+      margin: 20px 0;
+      background: #fff;
+      border-radius: 25px;
 
-    &__table {
-      overflow-x: auto;
+      &__info {
+        padding: 10px 25px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
 
-      table {
-        width: 100%;
-        border-collapse: collapse;
+        &__text {
 
-        th, td {
-          padding: 12px 15px;
-          text-align: left;
-          border-bottom: 1px solid #e0e0e0;
+          h1 {
+            font-family: var(--font-family);
+            font-weight: 500;
+            font-size: 16px;
+            color: #232323;
+          }
+          p {
+            font-family: var(--font-family);
+            font-weight: 400;
+            font-size: 15px;
+            color: #718ebf;
+
+            padding-top: 7px
+          }
         }
+        &__transfer {
 
-        th {
-          font-weight: 500;
-          color: #666;
-          font-size: 14px;
+          p {
+            font-family: var(--font-family);
+            font-weight: 400;
+            font-size: 16px;
+            color: #718ebf;
+          }
         }
+        &__number {
 
-        td {
-          color: #333;
-          font-size: 14px;
+          p {
+            font-family: var(--font-family);
+            font-weight: 400;
+            font-size: 16px;
+            color: #718ebf;
+          }
         }
+        &__status {
 
-        .status-pending {
-          color: #FFA500;
+          p {
+            font-family: var(--font-family);
+            font-weight: 400;
+            font-size: 16px;
+            color: #718ebf;
+          }
         }
+        &__money {
 
-        .status-completed {
-          color: #4CAF50;
-        }
-
-        .amount-negative {
-          color: #F44336;
-        }
-
-        .amount-positive {
-          color: #4CAF50;
-        }
-
-        tr:last-child td {
-          border-bottom: none;
+          p {
+            font-family: var(--font-family);
+            font-weight: 400;
+            font-size: 16px;
+            color: #718ebf;
+          }
         }
       }
     }
