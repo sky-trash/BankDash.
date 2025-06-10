@@ -35,7 +35,7 @@ const fetchCardData = async () => {
     }
   } catch (err) {
     error.value = err.message || 'Ошибка загрузки данных карты'
-    console.error('Error fetching card data:', err)
+    console.error('Ошибка при получении данных карты:', err)
   } finally {
     loading.value = false
   }

@@ -27,10 +27,10 @@ onMounted(async () => {
         ...data[key]
       })).sort((a, b) => new Date(b.date) - new Date(a.date))
     } else {
-      console.log("No transactions available")
+      console.log("Нет доступных транзакций")
     }
   } catch (error) {
-    console.error("Error fetching transactions:", error)
+    console.error("Ошибка при получении транзакций:", error)
   }
 })
 </script>

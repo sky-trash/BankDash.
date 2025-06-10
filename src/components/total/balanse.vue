@@ -22,7 +22,7 @@ const fetchBalance = async () => {
     }
   } catch (err) {
     error.value = err.message || 'Ошибка загрузки баланса'
-    console.error('Error fetching balance:', err)
+    console.error('Ошибка при получении баланса:', err)
   } finally {
     loading.value = false
   }

@@ -12,6 +12,7 @@ const loading = ref(false)
 
 const handleLogin = async () => {
   error.value = '' // Сбрасываем ошибку перед попыткой входа
+  loading.value = true // Активируем состояние загрузки
   
   try {
     // Проверяем, что email содержит @ (базовая валидация)
@@ -44,6 +45,8 @@ const handleLogin = async () => {
       default:
         error.value = err.message || 'Ошибка при входе. Попробуйте снова'
     }
+  } finally {
+    loading.value = false // Выключаем состояние загрузки в любом случае
   }
 }
 </script>
@@ -60,6 +63,7 @@ const handleLogin = async () => {
           placeholder="Введите ваш email" 
           required
           autocomplete="username"
+          :disabled="loading"
         >
       </div>
       
@@ -71,10 +75,18 @@ const handleLogin = async () => {
           placeholder="Введите пароль" 
           required
           autocomplete="current-password"
+          :disabled="loading"
         >
       </div>
       
-      <button type="submit" class="auth-button">{{ loading ? 'Загрузка...' : 'Войти' }}</button>
+      <button 
+        type="submit" 
+        class="auth-button"
+        :disabled="loading"
+      >
+        <span v-if="loading">Загрузка...</span>
+        <span v-else>Войти</span>
+      </button>
       
       <div class="auth-links">
         <p class="auth-link">

@@ -23,7 +23,7 @@ const fetchIncomes = async () => {
     }
   } catch (err) {
     error.value = err.message || 'Ошибка загрузки доходов'
-    console.error('Error fetching incomes:', err)
+    console.error('Ошибка при получении доходов:', err)
     incomes.value = 0 // При ошибке тоже показываем 0
   } finally {
     loading.value = false

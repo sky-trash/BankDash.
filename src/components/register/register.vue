@@ -137,7 +137,7 @@ const handleRegister = async () => {
     
   } catch (err) {
     error.value = err.message || 'Ошибка регистрации'
-    console.error('Registration error:', err)
+    console.error('Ошибка регистрации', err)
   } finally {
     loading.value = false
   }

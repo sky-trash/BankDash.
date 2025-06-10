@@ -23,7 +23,7 @@ const fetchExpenses = async () => {
     }
   } catch (err) {
     error.value = err.message || 'Ошибка загрузки расходов'
-    console.error('Error fetching expenses:', err)
+    console.error('Ошибка при получении расходов:', err)
     expenses.value = 0 // При ошибке тоже показываем 0
   } finally {
     loading.value = false
