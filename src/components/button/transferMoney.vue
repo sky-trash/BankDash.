@@ -7,7 +7,8 @@ import {
   where, 
   getDocs, 
   doc, 
-  runTransaction 
+  runTransaction,
+  getDoc
 } from 'firebase/firestore';
 
 const isModalOpen = ref(false);
@@ -101,6 +102,7 @@ const transferMoney = async () => {
     }
 
     await runTransaction(db, async (transaction) => {
+      // Обновляем балансы карт
       transaction.update(doc(db, 'cards', currentUserCard.value.id), {
         balance: currentUserCard.value.balance - amountNum,
         expense: (currentUserCard.value.expense || 0) + amountNum
@@ -111,6 +113,52 @@ const transferMoney = async () => {
         income: (recipientCard.income || 0) + amountNum
       });
 
+      // Получаем данные пользователей
+      const senderUserRef = doc(db, 'users', auth.currentUser.uid);
+      const senderUserSnap = await getDoc(senderUserRef);
+      const senderUserData = senderUserSnap.data();
+      
+      const recipientUserRef = doc(db, 'users', recipientCard.userId);
+      const recipientUserSnap = await getDoc(recipientUserRef);
+      const recipientUserData = recipientUserSnap.data();
+
+      // Функция для форматирования номера карты
+      const formatCardForHistory = (cardNum) => {
+        const cleanNum = cardNum.replace(/\D/g, '');
+        const last8 = cleanNum.slice(-8);
+        return `**** ${last8.slice(4)}`;
+      };
+
+      // Создаем записи в истории
+      const historyRef = collection(db, 'history');
+      
+      // Запись для отправителя
+      transaction.set(doc(historyRef), {
+        type: 'transfer',
+        amount: amountNum,
+        cardNumber: formatCardForHistory(recipientCard.cardNumber),
+        date: new Date(),
+        userId: auth.currentUser.uid,
+        userName: `${recipientUserData.firstName} ${recipientUserData.lastName}`,
+        status: 'completed',
+        direction: 'outgoing',
+        currency: '$'
+      });
+
+      // Запись для получателя
+      transaction.set(doc(historyRef), {
+        type: 'transfer',
+        amount: amountNum,
+        cardNumber: formatCardForHistory(currentUserCard.value.cardNumber),
+        date: new Date(),
+        userId: recipientCard.userId,
+        userName: `${senderUserData.firstName} ${senderUserData.lastName}`,
+        status: 'completed',
+        direction: 'incoming',
+        currency: '$'
+      });
+
+      // Создаем транзакции
       const transactionsRef = collection(db, 'transactions');
       transaction.set(doc(transactionsRef), {
         type: 'outgoing',
@@ -156,6 +204,7 @@ onMounted(() => {
   }
 });
 </script>
+
 
 <template>
   <main class="transferMoney">
