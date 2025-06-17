@@ -1,6 +1,7 @@
+
 <script setup>
 import { ref, onMounted } from 'vue'
-import { doc, getDoc } from 'firebase/firestore'
+import { collection, query, where, getDocs } from 'firebase/firestore'
 import { db, auth } from '@/firebase'
 
 const incomes = ref(0)
@@ -12,19 +13,26 @@ const fetchIncomes = async () => {
     const user = auth.currentUser
     if (!user) throw new Error('Пользователь не авторизован')
 
-    const docRef = doc(db, 'users', user.uid) // Предполагаем, что расходы хранятся в коллекции users
-    const docSnap = await getDoc(docRef)
+    // Создаем запрос к коллекции cards, где userId совпадает с текущим пользователем
+    const cardsRef = collection(db, 'cards')
+    const q = query(cardsRef, where('userId', '==', user.uid))
+    const querySnapshot = await getDocs(q)
 
-    if (docSnap.exists()) {
-      // Если incomes равно null или undefined, устанавливаем 0
-      incomes.value = docSnap.data().incomes ?? 0
+    if (!querySnapshot.empty) {
+      // Суммируем все доходы (income) из найденных карт
+      let totalIncomes = 0
+      querySnapshot.forEach((doc) => {
+        const cardData = doc.data()
+        totalIncomes += cardData.income || 0
+      })
+      incomes.value = totalIncomes
     } else {
-      incomes.value = 0 // Если документ не существует
+      incomes.value = 0 // Если карт не найдено
     }
   } catch (err) {
     error.value = err.message || 'Ошибка загрузки доходов'
     console.error('Ошибка при получении доходов:', err)
-    incomes.value = 0 // При ошибке тоже показываем 0
+    incomes.value = 0
   } finally {
     loading.value = false
   }
@@ -39,7 +47,7 @@ onMounted(() => {
   <main class="total">
     <div class="total__content">
       <div class="total__content__image">
-        <img src="../../../public/total/income.svg" alt="Расходы">
+        <img src="../../../public/total/income.svg" alt="Доходы">
       </div>
       <div class="total__content__text">
         <p>Доход</p>

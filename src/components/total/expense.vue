@@ -1,6 +1,7 @@
+
 <script setup>
 import { ref, onMounted } from 'vue'
-import { doc, getDoc } from 'firebase/firestore'
+import { collection, query, where, getDocs } from 'firebase/firestore'
 import { db, auth } from '@/firebase'
 
 const expenses = ref(0)
@@ -12,19 +13,26 @@ const fetchExpenses = async () => {
     const user = auth.currentUser
     if (!user) throw new Error('Пользователь не авторизован')
 
-    const docRef = doc(db, 'users', user.uid) // Предполагаем, что расходы хранятся в коллекции users
-    const docSnap = await getDoc(docRef)
+    // Создаем запрос к коллекции cards, где userId совпадает с текущим пользователем
+    const cardsRef = collection(db, 'cards')
+    const q = query(cardsRef, where('userId', '==', user.uid))
+    const querySnapshot = await getDocs(q)
 
-    if (docSnap.exists()) {
-      // Если expenses равно null или undefined, устанавливаем 0
-      expenses.value = docSnap.data().expenses ?? 0
+    if (!querySnapshot.empty) {
+      // Суммируем все расходы (expense) из найденных карт
+      let totalExpenses = 0
+      querySnapshot.forEach((doc) => {
+        const cardData = doc.data()
+        totalExpenses += cardData.expense || 0
+      })
+      expenses.value = totalExpenses
     } else {
-      expenses.value = 0 // Если документ не существует
+      expenses.value = 0 // Если карт не найдено
     }
   } catch (err) {
     error.value = err.message || 'Ошибка загрузки расходов'
     console.error('Ошибка при получении расходов:', err)
-    expenses.value = 0 // При ошибке тоже показываем 0
+    expenses.value = 0
   } finally {
     loading.value = false
   }
@@ -50,6 +58,7 @@ onMounted(() => {
     </div>
   </main>
 </template>
+
 <style>
 @import "./balanse.scss";
 </style>

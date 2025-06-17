@@ -4,4 +4,8 @@
     display: flex;
     margin: 5px 15px;
   }
+  &__cards {
+    display: flex;
+    gap: 30px;
+  }
 }

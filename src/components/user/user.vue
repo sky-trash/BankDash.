@@ -4,6 +4,8 @@ import Header from "../layout/header/header.vue"
 import Balanse from "../total/balanse.vue"
 import Expense from "../total/expense.vue"
 import Income from "../total/income.vue"
+import LastHistory from "../history/lastHistory.vue"
+import Cards from "../cards/cards.vue"
 </script>
 
 <template>
@@ -16,6 +18,10 @@ import Income from "../total/income.vue"
           <Balanse />
           <Expense />
           <Income />
+        </div>
+        <div class="user__content__cards">
+          <LastHistory/>
+          <Cards/>
         </div>
       </main>
     </div>
