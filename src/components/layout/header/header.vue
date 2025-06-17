@@ -12,7 +12,7 @@ const pageTitles = {
   '/transfer': 'Транзакции',
   '/user': 'Аккаунт',
   '/investment': 'Инвестиции',
-  '/credit': 'Кредит',
+  '/credit': 'Карты и кредит',
   '/settings': 'Настройки'
 };
 

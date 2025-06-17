@@ -62,7 +62,7 @@ const route = useRoute();
         <img class="rectangle" src="../../../../public/dash/Rectangle.svg" alt="">
         <img class="icon icon-white" src="../../../../public/dash/white/credit.svg" alt="">
         <img class="icon icon-blue" src="../../../../public/dash/blue/credit-blue.svg" alt="">
-        <h1>Кредит</h1>
+        <h1>Карты и кредит</h1>
       </router-link>
       
       <router-link 
