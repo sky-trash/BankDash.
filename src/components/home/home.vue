@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import Cards from '../cards/cards.vue'
+import CardsCredit from '../cards/cardsCredit.vue'
 
 import { useRouter } from 'vue-router'
 import { signOut } from 'firebase/auth'
@@ -15,7 +16,10 @@ const logout = async () => {
 </script>
 <template>
   <main class="home">
-    <Cards/>
+    <div class="home__cards">
+      <Cards />
+      <CardsCredit />
+    </div>
   </main>
 </template>
 <style scoped lang="scss">

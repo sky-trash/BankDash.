@@ -123,6 +123,7 @@ const handleCredit = async () => {
       userId: user.uid,
       createdAt: serverTimestamp(),
       isActive: true,
+      type: "credit",
       creditLimit: creditAmount.value,
       company: companyName.value
     }
@@ -142,26 +143,30 @@ const handleCredit = async () => {
   }
 }
 </script>
-
 <template>
   <main class="cardsCredit">
     <div class="cardsCredit__all">
       <h1>Кредитная карта</h1>
     </div>
     
-    <div class="cardsCredit__button" v-if="showGetCreditButton">
-      <button @click="showModal = true">
-        <h1>Получить кредит</h1>
-      </button>
+    <div class="cardsCredit__button" v-if="showGetCreditButton" @click="showModal = true">
+      <div class="cardsCredit__button__image">
+        <img src="../../../public/total/transferMoney.svg" alt="Transfer money">
+      </div>
+      <div class="cardsCredit__button__text">
+        <h1>Заявка на кредит +</h1>
+      </div>
     </div>
     
-    <div class="cardsCredit__modal" v-if="showModal">
-      <div class="modal-content">
-        <span class="close" @click="showModal = false">&times;</span>
-        <h2>Заявка на кредит</h2>
+    <div class="cardsCredit__modal" v-if="showModal" @click.self="showModal = false">
+      <div class="cardsCredit__modal__content">
+        <div class="cardsCredit__modal__content__header">
+          <h1>Заявка на кредит</h1>
+          <span class="close" @click="showModal = false">×</span>
+        </div>
 
         <div class="form-group">
-          <label>Имя</label>
+          <label>Имя:</label>
           <input 
             v-model="firstName" 
             type="text" 
@@ -172,7 +177,7 @@ const handleCredit = async () => {
         </div>
 
         <div class="form-group">
-          <label>Фамилия</label>
+          <label>Фамилия:</label>
           <input 
             v-model="lastName" 
             type="text" 
@@ -184,18 +189,17 @@ const handleCredit = async () => {
 
         <div class="form-group">
           <label>Сумма кредита ($):</label>
-          <label>От 100 до 1,000,000$</label>
           <input 
             type="number" 
             v-model.number="creditAmount" 
-            min="1" 
+            min="100" 
             max="1000000" 
             placeholder="До 1,000,000 $"
             required
-            @input="creditAmount = Math.min(1000000, creditAmount)"
+            @input="creditAmount = Math.min(1000000, Math.max(0, creditAmount))"
           >
-          <small v-if="creditAmount > 1000000" class="error-text">
-            Максимальная сумма кредита - 1,000,000 $
+          <small v-if="creditAmount > 1000000 || creditAmount < 0" class="error-text">
+            Сумма кредита должна быть от 0 до 1,000,000 $
           </small>
         </div>
         
@@ -265,95 +269,5 @@ const handleCredit = async () => {
   text-align: center;
   padding: 20px;
   font-size: 18px;
-}
-
-.cardsCredit__button button {
-  background-color: #4CAF50;
-  color: white;
-  border: none;
-  padding: 15px 32px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
-  margin: 20px 0;
-  cursor: pointer;
-  border-radius: 5px;
-  transition: background-color 0.3s;
-}
-
-.cardsCredit__button button:hover {
-  background-color: #45a049;
-}
-
-.cardsCredit__modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-}
-
-.modal-content {
-  background-color: white;
-  padding: 30px;
-  border-radius: 10px;
-  width: 400px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.modal-content h2 {
-  margin-top: 0;
-  color: #333;
-}
-
-.form-group {
-  margin-bottom: 20px;
-}
-
-.form-group label {
-  display: block;
-  margin-bottom: 5px;
-  font-weight: bold;
-}
-
-.form-group input {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  box-sizing: border-box;
-}
-
-.submit-btn {
-  background-color: #4CAF50;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  margin-right: 10px;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.cancel-btn {
-  background-color: #f44336;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.submit-btn:hover {
-  background-color: #45a049;
-}
-
-.cancel-btn:hover {
-  background-color: #d32f2f;
 }
 </style>

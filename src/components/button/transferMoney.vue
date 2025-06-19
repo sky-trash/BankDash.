@@ -213,7 +213,7 @@ onMounted(() => {
         <img src="../../../public/total/transferMoney.svg" alt="Transfer money">
       </div>
       <div class="transferMoney__content__text">
-        <h1>Перевести деньги +</h1>
+        <h1>Перевести деньги -</h1>
       </div>
     </div>
 

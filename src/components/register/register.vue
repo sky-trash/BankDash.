@@ -127,7 +127,8 @@ const handleRegister = async () => {
       cvv: Math.floor(100 + Math.random() * 900).toString(),
       userId: userCredential.user.uid,
       createdAt: serverTimestamp(),
-      isActive: true
+      isActive: true,
+      type: "debit"
     }
     
     await setDoc(doc(db, 'cards', userCredential.user.uid), cardData)
