@@ -1,0 +1,126 @@
+.cardList {
+  padding-top: 20px;
+
+  h1 {
+    font-family: var(--font-family);
+    font-weight: 600;
+    font-size: 22px;
+    color: #333b69;
+  }
+  &__content {
+    margin: 20px 0 0;
+
+    &__cards {
+      padding: 15px;
+      border-radius: 20px;
+      width: 1150px;
+      height: 90px;
+      background: #fff;
+
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+
+      &__type {
+        padding: 8px 0 8px 15px;
+
+        h1 {
+          font-family: var(--font-family);
+          font-weight: 500;
+          font-size: 16px;
+          color: #232323;
+
+          padding-bottom: 7px;
+          width: 81px;
+          max-width: max-content;
+        }
+        p {
+          font-family: var(--font-family);
+          font-weight: 400;
+          font-size: 15px;
+          color: #718ebf;
+        }
+      }
+      &__bank {
+        padding: 8px 0 8px 43px;
+
+        h1 {
+          font-family: var(--font-family);
+          font-weight: 500;
+          font-size: 16px;
+          color: #232323;
+
+          padding-bottom: 7px;
+          width: 81px;
+          max-width: max-content;
+        }
+        p {
+          font-family: var(--font-family);
+          font-weight: 400;
+          font-size: 15px;
+          color: #718ebf;
+        }
+      }
+      &__number {
+        padding: 8px 0 8px 44px;
+
+        h1 {
+          font-family: var(--font-family);
+          font-weight: 500;
+          font-size: 16px;
+          color: #232323;
+
+          padding-bottom: 7px;
+          width: 110px;
+          max-width: max-content;
+        }
+        p {
+          font-family: var(--font-family);
+          font-weight: 400;
+          font-size: 15px;
+          color: #718ebf;
+
+          width: 120px;
+        }
+      }
+      &__name {
+        padding: 8px 0 8px 47px;
+
+        h1 {
+          font-family: var(--font-family);
+          font-weight: 500;
+          font-size: 16px;
+          color: #232323;
+
+          padding-bottom: 7px;
+          width: 130px;
+          max-width: max-content;
+        }
+        p {
+          font-family: var(--font-family);
+          font-weight: 400;
+          font-size: 15px;
+          color: #718ebf;
+
+          width: 150px;
+        }
+      }
+      &__button {
+        padding: 13px 0 13px 34px;
+
+        h1 {
+          font-family: var(--font-family);
+          font-weight: 500;
+          font-size: 15px;
+          color: #1814f3;
+
+          max-width: max-content;
+          width: 130px;
+        }
+        h1:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+}

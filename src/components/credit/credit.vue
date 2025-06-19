@@ -3,6 +3,8 @@ import Dash from "../layout/dash/dash.vue"
 import Header from "../layout/header/header.vue"
 import Cards from "../cards/cards.vue";
 import CardsCredit from "../cards/cardsCredit.vue";
+import CardList from "../cardList/cardList.vue"
+import AddCard from "../button/addCard.vue";
 </script>
 
 <template>
@@ -14,6 +16,12 @@ import CardsCredit from "../cards/cardsCredit.vue";
         <div class="credit__cards">
           <Cards/>
           <CardsCredit/>
+        </div>
+        <div class="credit__list">
+          <CardList/>
+        </div>
+        <div class="credit__add">
+          <AddCard/>
         </div>
       </main>
     </div>

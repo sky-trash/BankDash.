@@ -123,7 +123,7 @@ const handleCredit = async () => {
       userId: user.uid,
       createdAt: serverTimestamp(),
       isActive: true,
-      type: "credit",
+      type: "Кредитная",
       creditLimit: creditAmount.value,
       company: companyName.value
     }

@@ -128,7 +128,7 @@ const handleRegister = async () => {
       userId: userCredential.user.uid,
       createdAt: serverTimestamp(),
       isActive: true,
-      type: "debit"
+      type: "Дебитовая"
     }
     
     await setDoc(doc(db, 'cards', userCredential.user.uid), cardData)
