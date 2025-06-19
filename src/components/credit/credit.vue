@@ -2,9 +2,11 @@
 import Dash from "../layout/dash/dash.vue"
 import Header from "../layout/header/header.vue"
 import Cards from "../cards/cards.vue";
+import CardsTwo from '../cards/cards-two.vue'
 import CardsCredit from "../cards/cardsCredit.vue";
 import CardList from "../cardList/cardList.vue"
 import AddCard from "../button/addCard.vue";
+import CardSettings from "../cardSettings/cardSettings.vue";
 </script>
 
 <template>
@@ -15,6 +17,7 @@ import AddCard from "../button/addCard.vue";
       <main class="credit">
         <div class="credit__cards">
           <Cards/>
+          <CardsTwo/>
           <CardsCredit/>
         </div>
         <div class="credit__list">
@@ -22,6 +25,7 @@ import AddCard from "../button/addCard.vue";
         </div>
         <div class="credit__add">
           <AddCard/>
+          <CardSettings/>
         </div>
       </main>
     </div>

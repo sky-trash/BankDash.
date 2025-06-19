@@ -1,0 +1,65 @@
+.cardSettings {
+
+  &__text {
+
+    h1 {
+      font-family: var(--font-family);
+      font-weight: 600;
+      font-size: 22px;
+      color: #333b69;
+    }
+  }
+  &__content {
+    border-radius: 25px;
+    background: #fff;
+    padding: 30px 30px 10px 30px;
+
+    margin-top: 20px;
+
+    &__time {
+      position: absolute;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(0, 0, 0, 0.7);
+      color: white;
+      padding: 5px 10px;
+      border-radius: 5px;
+      font-size: 12px;
+
+      h1 {
+        font-family: var(--font-family);
+        font-weight: 600;
+        font-size: 26px;
+        color: #333b69;
+      }
+    }
+    &__container {
+
+      &__card {
+        display: flex;
+        margin-bottom: 20px;
+        position: relative;
+
+        &__text {
+          padding: 7px 0 9px 20px;
+
+          h1 {
+            font-family: var(--font-family);
+            font-weight: 500;
+            font-size: 16px;
+            color: #232323;
+          }
+          p {
+            font-family: var(--font-family);
+            font-weight: 400;
+            font-size: 12px;
+            color: #718ebf;
+
+            padding-top: 7px;
+          }
+        }
+      }
+    }
+  }
+}

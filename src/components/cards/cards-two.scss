@@ -1,7 +1,10 @@
 .cards {
   width: 350px;
   height: 282px;  
-  
+
+  &__container {
+    display: flex;
+  }
   &__all {
     display: flex;
     justify-content: space-between;
@@ -17,7 +20,7 @@
     border-radius: 25px;
     width: 350px;
     height: 235px;
-    background: linear-gradient(136deg, #4c49ed 0%, #0a06f4 100%); 
+    background: linear-gradient(136deg, #2d60ff 0%, #539bff 100%);
 
     margin: 20px 0 0;
 

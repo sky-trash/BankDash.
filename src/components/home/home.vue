@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import Cards from '../cards/cards.vue'
+import CardsTwo from '../cards/cards-two.vue'
 import CardsCredit from '../cards/cardsCredit.vue'
 
 import { useRouter } from 'vue-router'
@@ -18,6 +19,7 @@ const logout = async () => {
   <main class="home">
     <div class="home__cards">
       <Cards />
+      <CardsTwo/>
       <CardsCredit />
     </div>
   </main>
