@@ -1,7 +1,8 @@
 <script setup>
 import Dash from "../layout/dash/dash.vue"
 import Header from "../layout/header/header.vue"
-import Home from "../home/home.vue"
+import Cards from "../cards/cards.vue";
+import CardsCredit from "../cards/cardsCredit.vue";
 </script>
 
 <template>
@@ -10,7 +11,10 @@ import Home from "../home/home.vue"
     <div class="content-area">
       <Header />
       <main class="main-content">
-        credit
+        <div>
+          <Cards/>
+          <CardsCredit/>
+        </div>
       </main>
     </div>
   </div>
