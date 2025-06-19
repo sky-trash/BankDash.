@@ -1,0 +1,140 @@
+.profile-edit {
+  max-width: 800px;
+  margin: 0 auto;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
+  .tabs {
+    display: flex;
+    border-bottom: 1px solid #e0e0e0;
+
+    button {
+      flex: 1;
+      padding: 15px 20px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 500;
+      color: #666;
+      transition: all 0.3s ease;
+      position: relative;
+
+      &:hover {
+        background: #f5f5f5;
+        color: #333;
+      }
+
+      &.active {
+        color: #2c3e50;
+        font-weight: 600;
+
+        &::after {
+          content: '';
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          height: 3px;
+          background: #42b983;
+        }
+      }
+    }
+  }
+
+  .profile-content,
+  .preferences-content,
+  .security-content {
+    padding: 25px;
+  }
+
+  .form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+
+    @media (max-width: 768px) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .form-group {
+    margin-bottom: 15px;
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+      color: #555;
+      font-size: 14px;
+    }
+
+    input,
+    select {
+      width: 100%;
+      padding: 10px 15px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-size: 15px;
+      transition: border 0.3s;
+
+      &:focus {
+        border-color: #42b983;
+        outline: none;
+        box-shadow: 0 0 0 2px rgba(66, 185, 131, 0.2);
+      }
+
+      &:disabled {
+        background: #f5f5f5;
+        color: #777;
+      }
+    }
+
+    .password-field {
+      position: relative;
+
+      .show-password {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: #666;
+
+        &:hover {
+          color: #333;
+        }
+      }
+    }
+  }
+
+  .save-btn {
+    display: block;
+    width: 100%;
+    max-width: 200px;
+    margin: 30px auto 0;
+    padding: 12px 20px;
+    background: #42b983;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.3s;
+
+    &:hover {
+      background: darken(#42b983, 10%);
+    }
+
+    &:disabled {
+      background: #a0a0a0;
+      cursor: not-allowed;
+    }
+  }
+}
