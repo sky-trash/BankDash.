@@ -10,8 +10,8 @@ import CardsCredit from "../cards/cardsCredit.vue";
     <Dash />
     <div class="content-area">
       <Header />
-      <main class="main-content">
-        <div>
+      <main class="credit">
+        <div class="credit__cards">
           <Cards/>
           <CardsCredit/>
         </div>
