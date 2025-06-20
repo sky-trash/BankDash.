@@ -4,8 +4,8 @@ import Dash from '../layout/dash/dash.vue'
 import { ref, onMounted } from 'vue'
 import { auth, db } from '@/firebase'
 import { doc, getDoc, setDoc } from 'firebase/firestore'
-import { 
-  updateEmail, 
+import {
+  updateEmail,
   updatePassword,
   reauthenticateWithCredential,
   EmailAuthProvider
@@ -34,7 +34,8 @@ interface Tab {
 
 const activeTab = ref<string>('profile')
 const tabs = ref<Tab[]>([
-  { id: 'profile', label: 'Edit Profile' },
+  { id: 'profile', label: 'Настройки профиля' },
+  { id: 'security', label: 'Безопасность' },
 ])
 
 const profileData = ref<ProfileData>({
@@ -101,12 +102,12 @@ const togglePasswordVisibility = () => {
 const handleReauthentication = async () => {
   try {
     if (!currentUser.value || !currentUser.value.email) return
-    
+
     const credential = EmailAuthProvider.credential(
       currentUser.value.email,
       currentPassword.value
     )
-    
+
     await reauthenticateWithCredential(currentUser.value, credential)
     showReauthModal.value = false
     currentPassword.value = ''
@@ -179,111 +180,107 @@ const saveProfile = async () => {
     <Dash />
     <div class="content-area">
       <Header />
-      <div class="profile-edit">
+      <div class="settingsProfile">
         <div v-if="errorMessage" class="error-message">
           {{ errorMessage }}
         </div>
-        
-        <div class="tabs">
-          <button 
-            v-for="tab in tabs" 
-            :key="tab.id" 
-            :class="{ active: activeTab === tab.id }"
-            @click="activeTab = tab.id"
-          >
-            {{ tab.label }}
-          </button>
+        <div class="settingsProfile__tabs">
+          <div v-for="tab in tabs" :key="tab.id" :class="{ active: activeTab === tab.id }" @click="activeTab = tab.id">
+            <h1>{{ tab.label }}</h1>
+            <!-- <img src="../../../public/dash/Rectangle.svg" alt=""> -->
+          </div>
         </div>
+        <div class="settingsProfile__edit">
+          <div v-if="activeTab === 'profile'" class="settingsProfile__edit__content">
+            <form @submit.prevent="saveProfile">
+              <div class="settingsProfile__edit__content__form">
+                <div class="form-group">
+                  <h1>Ваше имя:</h1>
+                  <input v-model="profileData.firstName" type="text">
+                </div>
+                <div class="form-group">
+                  <h1>Ваша фамилия:</h1>
+                  <input v-model="profileData.lastName" type="text">
+                </div>
+                <div class="form-group">
+                  <h1>Ваше отчество:</h1>
+                  <input v-model="profileData.middleName" type="text">
+                </div>
+                <div class="form-group">
+                  <h1>Логин:</h1>
+                  <input v-model="profileData.username" type="text">
+                </div>
+                <div class="form-group" id="form-group-disable">
+                  <h1>Email:</h1>
+                  <input v-model="profileData.email" type="text" disabled>
+                </div>
+                <div class="form-group" id="form-group-disable">
+                  <h1>Пароль:</h1>
+                  <input v-model="profileData.password" :type="showPassword ? 'text' : 'password'"
+                    placeholder="********" disabled>
+                  <small>Можно изменить в в разделе "Безопасность"</small>
+                </div>
+                <div class="form-group">
+                  <h1>Текущий адресс:</h1>
+                  <input v-model="profileData.presentAddress" type="text">
+                </div>
+                <div class="form-group">
+                  <h1>Постоянный адрес:</h1>
+                  <input v-model="profileData.permanentAddress" type="text">
+                </div>
+                <div class="form-group">
+                  <h1>Город:</h1>
+                  <input v-model="profileData.city" type="text">
+                </div>
+                <div class="form-group">
+                  <h1>Почтовый индекс:</h1>
+                  <input v-model="profileData.postalCode" type="text">
+                </div>
+                <div class="form-group">
+                  <h1>Страна:</h1>
+                  <select v-model="profileData.country">
+                    <option value="Russia">Россия</option>
+                    <option value="USA">США</option>
+                    <option value="UK">Великобритания</option>
+                    <option value="Germany">Германия</option>
+                    <option value="Spain">Испания</option>
+                    <option value="Brasil">Бразилия</option>
+                    <option value="China">Китай</option>
+                    <option value="AU">Австралия</option>
+                  </select>
+                </div>
+              </div>
+              <div class="settingsProfile__edit__content__button">
+                <button type="submit" :disabled="isSaving">
+                  <h1>{{ isSaving ? 'Сохранение...' : 'Сохранить' }}</h1>
+                </button>
+              </div>
+            </form>
+          </div>
+          <div v-if="activeTab === 'security'" class="settingsProfile__edit__content">
+            <form @submit.prevent="saveProfile">
+
+            </form>
+          </div>
+        </div>
+      </div>
+      <div class="profile-edit">
 
         <div v-if="activeTab === 'profile'" class="profile-content">
           <form @submit.prevent="saveProfile">
             <div class="form-grid">
               <div class="form-group">
-                <label>Имя:</label>
-                <input v-model="profileData.firstName" type="text">
-              </div>
-
-              <div class="form-group">
-                <label>Фамилия:</label>
-                <input v-model="profileData.lastName" type="text">
-              </div>
-
-              <div class="form-group">
-                <label>Отчество:</label>
-                <input v-model="profileData.middleName" type="text">
-              </div>
-
-              <div class="form-group">
-                <label>Логин:</label>
-                <input v-model="profileData.username" type="text">
-              </div>
-
-              <div class="form-group">
-                <label>Email:</label>
-                <input v-model="profileData.email" type="email" disabled>
-              </div>
-
-              <div class="form-group">
                 <label>Пароль:</label>
                 <div class="password-field">
-                  <input 
-                    v-model="profileData.password" 
-                    :type="showPassword ? 'text' : 'password'" 
-                    placeholder="********"
-                  >
-                  <button 
-                    type="button" 
-                    class="show-password" 
-                    @click="togglePasswordVisibility"
-                  >
+                  <input v-model="profileData.password" :type="showPassword ? 'text' : 'password'"
+                    placeholder="********">
+                  <button type="button" class="show-password" @click="togglePasswordVisibility">
                     {{ showPassword ? 'Скрыть' : 'Показать' }}
                   </button>
                 </div>
               </div>
 
-              <div class="form-group">
-                <label>Дата рождения:</label>
-                <input v-model="profileData.dob" type="date" disabled>
-              </div>
-
-              <div class="form-group">
-                <label>Текущий адрес:</label>
-                <input v-model="profileData.presentAddress" type="text">
-              </div>
-
-              <div class="form-group">
-                <label>Постоянный адрес:</label>
-                <input v-model="profileData.permanentAddress" type="text">
-              </div>
-
-              <div class="form-group">
-                <label>Город:</label>
-                <input v-model="profileData.city" type="text">
-              </div>
-
-              <div class="form-group">
-                <label>Почтовый индекс:</label>
-                <input v-model="profileData.postalCode" type="text">
-              </div>
-
-              <div class="form-group">
-                <label>Страна:</label>
-                <select v-model="profileData.country">
-                  <option value="Russia">Россия</option>
-                  <option value="USA">США</option>
-                  <option value="UK">Великобритания</option>
-                  <option value="Germany">Германия</option>
-                  <option value="Spain">Испания</option>
-                  <option value="Brasil">Бразилия</option>
-                  <option value="China">Китай</option>
-                  <option value="AU">Австралия</option>
-                </select>
-              </div>
             </div>
-
-            <button type="submit" class="save-btn" :disabled="isSaving">
-              {{ isSaving ? 'Сохранение...' : 'Сохранить' }}
-            </button>
           </form>
         </div>
       </div>
@@ -294,15 +291,11 @@ const saveProfile = async () => {
       <div class="modal-content">
         <h3>Требуется повторная аутентификация</h3>
         <p>Для изменения важных данных введите ваш текущий пароль:</p>
-        
+
         <div class="form-group">
-          <input 
-            v-model="currentPassword" 
-            type="password" 
-            placeholder="Текущий пароль"
-          >
+          <input v-model="currentPassword" type="password" placeholder="Текущий пароль">
         </div>
-        
+
         <div class="modal-actions">
           <button @click="showReauthModal = false" class="cancel-btn">
             Отмена
