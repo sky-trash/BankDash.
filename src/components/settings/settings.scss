@@ -4,7 +4,6 @@
 
   border-radius: 25px;
   width: 1110px;
-  height: 717px;
   background: #fff;
 
   &__tabs {
@@ -90,12 +89,63 @@
             width: 418px;
             height: 50px;
             background: #fff;
+
+            font-family: var(--font-family);
+            font-weight: 400;
+            font-size: 15px;
+            color: #718ebf;
+            padding-left: 20px;
+
+            margin-top: 11px;
+          }
+          select {
+            border: 1px solid #dfeaf2;
+            border-radius: 15px;
+            width: 418px;
+            height: 50px;
+            background: #fff;
+
+            font-family: var(--font-family);
+            font-weight: 400;
+            font-size: 15px;
+            color: #718ebf;
+            padding-left: 20px;
+
+            margin-top: 11px;
           }
         }
         #form-group-disable {
 
           input {
-            background: #afafaf;
+            background: #ededed;
+          }
+        }
+      }
+      &__button {
+        display: flex;
+        justify-content: end;
+
+        button {
+          border-radius: 15px;
+          width: 190px;
+          height: 50px;
+          background: #1814f3;
+          border: none;
+
+          h1 {
+            font-family: var(--font-family);
+            font-weight: 500;
+            font-size: 18px;
+            text-align: center;
+            color: #fff;
+          }
+        }
+        button:hover {
+          border: 1px dashed #1814f3;
+          background: #fff;
+
+          h1 {
+            color: #1814f3;
           }
         }
       }

@@ -91,7 +91,7 @@ const loadUserProfile = async () => {
     }
   } catch (error) {
     console.error('Error loading profile:', error)
-    errorMessage.value = 'Failed to load profile data'
+    errorMessage.value = 'Не удалось загрузить данные профиля'
   }
 }
 
@@ -111,16 +111,15 @@ const handleReauthentication = async () => {
     await reauthenticateWithCredential(currentUser.value, credential)
     showReauthModal.value = false
     currentPassword.value = ''
-    await saveProfileChanges() // Proceed with the original save operation
+    await saveProfileChanges()
   } catch (error) {
     console.error('Reauthentication failed:', error)
-    errorMessage.value = 'Incorrect password. Please try again.'
+    errorMessage.value = 'Неправильный пароль. Попробуйте еще раз.'
   }
 }
 
 const saveProfileChanges = async () => {
   try {
-    // Update profile data in Firestore
     const userRef = doc(db, 'users', currentUser.value!.uid)
     await setDoc(userRef, {
       firstName: profileData.value.firstName,
@@ -136,22 +135,20 @@ const saveProfileChanges = async () => {
       lastUpdated: new Date()
     }, { merge: true })
 
-    // Update email if changed
     if (profileData.value.email !== currentUser.value!.email) {
       await updateEmail(currentUser.value!, profileData.value.email)
     }
 
-    // Update password if changed
     if (profileData.value.password) {
       await updatePassword(currentUser.value!, profileData.value.password)
     }
 
     alert('Profile updated successfully!')
-    profileData.value.password = '' // Clear password field after save
+    profileData.value.password = '' 
   } catch (error) {
     console.error('Error updating profile:', error)
-    errorMessage.value = 'Failed to update profile: ' + (error as Error).message
-    throw error // Re-throw to handle in parent function
+    errorMessage.value = 'Не удалось обновить профиль: ' + (error as Error).message
+    throw error 
   }
 }
 
@@ -259,34 +256,25 @@ const saveProfile = async () => {
           </div>
           <div v-if="activeTab === 'security'" class="settingsProfile__edit__content">
             <form @submit.prevent="saveProfile">
-
+              <div class="form-grid">
+                <div class="form-group">
+                  <h1>Пароль:</h1>
+                  <div class="password-field">
+                    <input v-model="profileData.password" :type="showPassword ? 'text' : 'password'"
+                      placeholder="********">
+                    <button type="button" class="show-password" @click="togglePasswordVisibility">
+                      {{ showPassword ? 'Скрыть' : 'Показать' }}
+                    </button>
+                  </div>
+                </div>
+              </div>
             </form>
           </div>
         </div>
       </div>
-      <div class="profile-edit">
-
-        <div v-if="activeTab === 'profile'" class="profile-content">
-          <form @submit.prevent="saveProfile">
-            <div class="form-grid">
-              <div class="form-group">
-                <label>Пароль:</label>
-                <div class="password-field">
-                  <input v-model="profileData.password" :type="showPassword ? 'text' : 'password'"
-                    placeholder="********">
-                  <button type="button" class="show-password" @click="togglePasswordVisibility">
-                    {{ showPassword ? 'Скрыть' : 'Показать' }}
-                  </button>
-                </div>
-              </div>
-
-            </div>
-          </form>
-        </div>
-      </div>
     </div>
 
-    <!-- Reauthentication Modal -->
+    <!-- Modal -->
     <div v-if="showReauthModal" class="modal-overlay">
       <div class="modal-content">
         <h3>Требуется повторная аутентификация</h3>
@@ -329,7 +317,6 @@ const saveProfile = async () => {
 .content-area {
   flex: 1;
   margin-left: 249px;
-  /* Ширина бокового меню */
 }
 
 .header {
