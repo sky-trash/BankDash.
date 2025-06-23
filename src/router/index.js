@@ -13,7 +13,7 @@ const router = createRouter({
       name: 'login',
       component: () => import('../pages/login.vue'),
       meta: {
-        title: 'Login',
+        title: 'Авторизация',
         requiresUnauth: true
       }
     },
@@ -22,7 +22,7 @@ const router = createRouter({
       name: 'register',
       component: () => import('../pages/register.vue'),
       meta: {
-        title: 'Register',
+        title: 'Пегистрация',
         requiresUnauth: true
       }
     },
@@ -31,7 +31,7 @@ const router = createRouter({
       name: 'index',
       component: () => import('../pages/index.vue'),
       meta: {
-        title: 'index',
+        title: 'Главная',
         requiresAuth: true
       }
     },
