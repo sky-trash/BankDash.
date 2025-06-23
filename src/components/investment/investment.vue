@@ -9,8 +9,18 @@ import Home from "../home/home.vue"
     <Dash />
     <div class="content-area">
       <Header />
-      <main class="main-content">
-        invest
+      <main class="investment">
+        <div class="investment__content">
+          <div class="investment__content__image">
+            <img src="../../../public/investment/Non.svg" alt="">
+          </div>
+          <div class="investment__content__logo">
+            <h1>Раздел находится в разработке!!!</h1>
+          </div>
+          <div class="investment__content__text">
+            <h1>Приносим свои извенения за предоставленные неудобства.</h1>
+          </div>
+        </div>
       </main>
     </div>
   </div>
