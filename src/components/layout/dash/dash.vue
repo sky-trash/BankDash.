@@ -6,9 +6,9 @@ const route = useRoute();
 
 <template>
   <div class="dash">
-    <div class="dash__logo">
+    <router-link to="/" class="dash__logo" :class="{ 'is-active': route.path === '/' }">
       <img src="../../../../public/dash/Logo.svg" alt="logo">
-    </div>
+    </router-link>
     <nav class="dash__nav">
       <router-link 
         to="/" 

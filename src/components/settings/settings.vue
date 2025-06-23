@@ -280,7 +280,7 @@ const togglePasswordVisibility = () => {
                   <input v-model="profileData.placeBirth" type="text">
                 </div>
                 <div class="form-group">
-                  <h1>Адресс проживания:</h1>
+                  <h1>Адрес проживания:</h1>
                   <input v-model="profileData.permanentAddress" type="text">
                 </div>
                 <div class="form-group">

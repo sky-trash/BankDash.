@@ -87,7 +87,7 @@ const handleCredit = async () => {
 
     // Валидация полей
     if (!firstName.value || !lastName.value || !creditAmount.value || !monthlyIncome.value) {
-      throw new Error('Пожалуйста, заполните все обязательные поля')
+      throw new Error('Пожалуйста, заполните все поля')
     }
 
     // Валидация суммы кредита
@@ -109,7 +109,7 @@ const handleCredit = async () => {
       throw new Error('Пользователь не авторизован')
     }
 
-    // Создаем карту в коллекции cards
+    // Создаем карту в коллекции credit
     const cardHolderName = `${transliterate(lastName.value)} ${transliterate(firstName.value)}`.toUpperCase()
     
     const newCardData = {

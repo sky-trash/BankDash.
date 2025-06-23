@@ -80,7 +80,7 @@ const addNewCard = async () => {
 
     // Создаем карту во второй коллекции
     await addDoc(collection(db, 'cards-two'), {
-      type: 'Дебитовая дополнительная',
+      type: 'Дебетовая дополнительная',
       cardNumber: generateCardNumber(),
       cardHolderRu: cardHolderRu.value, // Русская версия
       cardHolder: cardHolder.value, // Английская версия
