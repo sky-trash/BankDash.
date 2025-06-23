@@ -14,14 +14,16 @@ import Cards from "../cards/cards.vue"
     <div class="content-area">
       <Header />
       <main class="user__content">
-        <div class="user__content__total">
-          <Balanse />
-          <Expense />
-          <Income />
-        </div>
         <div class="user__content__cards">
-          <LastHistory/>
-          <Cards/>
+          <Cards />
+          <div class="user__content__cards__total">
+            <Balanse />
+            <Expense />
+            <Income />
+          </div>
+        </div>
+        <div class="user__content__history">
+          <LastHistory />
         </div>
       </main>
     </div>

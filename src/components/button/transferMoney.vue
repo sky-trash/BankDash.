@@ -17,7 +17,9 @@ const amount = ref('');
 const error = ref('');
 const success = ref('');
 const isLoading = ref(false);
-const currentUserCard = ref(null);
+const userCards = ref([]);
+const selectedCard = ref(null);
+const cardCollections = ['cards', 'cards-two', 'credit'];
 
 const openModal = () => {
   isModalOpen.value = true;
@@ -37,19 +39,35 @@ const formatCardNumberInput = (e) => {
   cardNumber.value = value.replace(/(\d{4})(?=\d)/g, '$1 ');
 };
 
-const loadUserCard = async () => {
+const loadUserCards = async () => {
   try {
-    const cardsRef = collection(db, 'cards');
-    const q = query(cardsRef, where('userId', '==', auth.currentUser?.uid));
-    const querySnapshot = await getDocs(q);
+    const cards = [];
     
-    if (!querySnapshot.empty) {
-      currentUserCard.value = querySnapshot.docs[0].data();
-      currentUserCard.value.id = querySnapshot.docs[0].id;
+    // Загружаем карты из всех коллекций
+    for (const collectionName of cardCollections) {
+      const cardsRef = collection(db, collectionName);
+      const q = query(cardsRef, where('userId', '==', auth.currentUser?.uid));
+      const querySnapshot = await getDocs(q);
+      
+      querySnapshot.forEach(doc => {
+        const cardData = doc.data();
+        cards.push({
+          ...cardData,
+          id: doc.id,
+          collection: collectionName
+        });
+      });
+    }
+    
+    userCards.value = cards;
+    
+    // Выбираем первую карту по умолчанию
+    if (cards.length > 0) {
+      selectedCard.value = cards[0];
     }
   } catch (err) {
-    console.error('Ошибка загрузки карты:', err);
-    error.value = 'Ошибка загрузки данных карты';
+    console.error('Ошибка загрузки карт:', err);
+    error.value = 'Ошибка загрузки данных карт';
   }
 };
 
@@ -64,51 +82,63 @@ const transferMoney = async () => {
     }
 
     const amountNum = parseFloat(amount.value);
-    if (isNaN(amountNum) || amountNum <= 0) {
+    if (isNaN(amountNum)) {
       throw new Error('Введите корректную сумму');
     }
+    
+    if (amountNum <= 0) {
+      throw new Error('Сумма должна быть больше нуля');
+    }
 
-    if (!currentUserCard.value) {
-      throw new Error('Ваша карта не найдена');
+    if (!selectedCard.value) {
+      throw new Error('Карта отправителя не выбрана');
     }
 
     const cleanCardNumber = cardNumber.value.replace(/\D/g, '');
-
-    const cardsRef = collection(db, 'cards');
-    const cardsSnapshot = await getDocs(cardsRef);
     
+    // Ищем карту получателя во всех коллекциях
     let recipientCard = null;
     let recipientCardRef = null;
+    let recipientCollection = '';
     
-    cardsSnapshot.forEach(doc => {
-      const cardData = doc.data();
-      const dbCardNumber = cardData.cardNumber?.replace(/\D/g, '') || '';
-      if (dbCardNumber === cleanCardNumber) {
-        recipientCard = cardData;
-        recipientCardRef = doc.ref;
-      }
-    });
+    for (const collectionName of cardCollections) {
+      const cardsRef = collection(db, collectionName);
+      const cardsSnapshot = await getDocs(cardsRef);
+      
+      cardsSnapshot.forEach(doc => {
+        const cardData = doc.data();
+        const dbCardNumber = cardData.cardNumber?.replace(/\D/g, '') || '';
+        if (dbCardNumber === cleanCardNumber) {
+          recipientCard = cardData;
+          recipientCardRef = doc.ref;
+          recipientCollection = collectionName;
+        }
+      });
+      
+      if (recipientCard) break;
+    }
 
     if (!recipientCard) {
       throw new Error('Карта получателя не найдена. Проверьте номер карты');
     }
 
-    if (recipientCard.cardNumber?.replace(/\D/g, '') === currentUserCard.value.cardNumber?.replace(/\D/g, '')) {
+    if (recipientCard.cardNumber?.replace(/\D/g, '') === selectedCard.value.cardNumber?.replace(/\D/g, '')) {
       throw new Error('Нельзя перевести деньги на ту же карту');
     }
 
-    if (currentUserCard.value.balance < amountNum) {
+    if (selectedCard.value.balance < amountNum) {
       throw new Error('Недостаточно средств на карте');
     }
 
     await runTransaction(db, async (transaction) => {
-      // Обновляем балансы карт
-      transaction.update(doc(db, 'cards', currentUserCard.value.id), {
-        balance: currentUserCard.value.balance - amountNum,
-        expense: (currentUserCard.value.expense || 0) + amountNum
+      // Обновляем баланс карты отправителя
+      transaction.update(doc(db, selectedCard.value.collection, selectedCard.value.id), {
+        balance: selectedCard.value.balance - amountNum,
+        expense: (selectedCard.value.expense || 0) + amountNum
       });
 
-      transaction.update(recipientCardRef, {
+      // Обновляем баланс карты получателя
+      transaction.update(doc(db, recipientCollection, recipientCardRef.id), {
         balance: recipientCard.balance + amountNum,
         income: (recipientCard.income || 0) + amountNum
       });
@@ -142,20 +172,24 @@ const transferMoney = async () => {
         userName: `${recipientUserData.firstName} ${recipientUserData.lastName}`,
         status: 'completed',
         direction: 'outgoing',
-        currency: '$'
+        currency: '$',
+        fromCollection: selectedCard.value.collection,
+        toCollection: recipientCollection
       });
 
       // Запись для получателя
       transaction.set(doc(historyRef), {
         type: 'transfer',
         amount: amountNum,
-        cardNumber: formatCardForHistory(currentUserCard.value.cardNumber),
+        cardNumber: formatCardForHistory(selectedCard.value.cardNumber),
         date: new Date(),
         userId: recipientCard.userId,
         userName: `${senderUserData.firstName} ${senderUserData.lastName}`,
         status: 'completed',
         direction: 'incoming',
-        currency: '$'
+        currency: '$',
+        fromCollection: selectedCard.value.collection,
+        toCollection: recipientCollection
       });
 
       // Создаем транзакции
@@ -163,8 +197,10 @@ const transferMoney = async () => {
       transaction.set(doc(transactionsRef), {
         type: 'outgoing',
         amount: amountNum,
-        fromCard: currentUserCard.value.cardNumber,
+        fromCard: selectedCard.value.cardNumber,
+        fromCollection: selectedCard.value.collection,
         toCard: recipientCard.cardNumber,
+        toCollection: recipientCollection,
         toUser: recipientCard.userId,
         date: new Date(),
         userId: auth.currentUser.uid,
@@ -174,16 +210,18 @@ const transferMoney = async () => {
       transaction.set(doc(transactionsRef), {
         type: 'incoming',
         amount: amountNum,
-        fromCard: currentUserCard.value.cardNumber,
+        fromCard: selectedCard.value.cardNumber,
+        fromCollection: selectedCard.value.collection,
         fromUser: auth.currentUser.uid,
         toCard: recipientCard.cardNumber,
+        toCollection: recipientCollection,
         date: new Date(),
         userId: recipientCard.userId,
         status: 'completed'
       });
     });
 
-    await loadUserCard();
+    await loadUserCards();
 
     success.value = `Успешно переведено ${amountNum.toFixed(2)} $ на карту ${recipientCard.cardNumber.replace(/(\d{4})(?=\d)/g, '$1 ')}`;
     cardNumber.value = '';
@@ -198,13 +236,12 @@ const transferMoney = async () => {
 
 onMounted(() => {
   if (auth.currentUser) {
-    loadUserCard();
+    loadUserCards();
   } else {
     error.value = 'Пользователь не авторизован';
   }
 });
 </script>
-
 
 <template>
   <main class="transferMoney">
@@ -223,10 +260,24 @@ onMounted(() => {
         <div class="transfer-form">
           <h2>Перевод денег</h2>
           
-          <div v-if="currentUserCard" class="user-card-info">
-            <h3>Ваша карта</h3>
-            <p>{{ currentUserCard.cardNumber.replace(/(\d{4})(?=\d)/g, '$1 ') }}</p>
-            <p>Баланс: {{ currentUserCard.balance.toFixed(2) }} $</p>
+          <div v-if="userCards.length > 0" class="form-group">
+            <label>Выберите карту для перевода:</label>
+            <select v-model="selectedCard" class="card-select">
+              <option 
+                v-for="card in userCards" 
+                :key="card.id" 
+                :value="card"
+              >
+                {{ card.cardNumber.replace(/(\d{4})(?=\d)/g, '$1 ') }} ({{ card.type }}) - {{ card.balance.toFixed(2) }} $
+              </option>
+            </select>
+          </div>
+          
+          <div v-if="selectedCard" class="user-card-info">
+            <h3>Выбранная карта</h3>
+            <p>{{ selectedCard.cardNumber.replace(/(\d{4})(?=\d)/g, '$1 ') }}</p>
+            <p>Тип: {{ selectedCard.type }}</p>
+            <p>Баланс: {{ selectedCard.balance.toFixed(2) }} $</p>
           </div>
           
           <div v-if="error" class="error-message">{{ error }}</div>
@@ -250,13 +301,13 @@ onMounted(() => {
               type="number" 
               placeholder="100" 
               min="1"
-              :max="currentUserCard ? currentUserCard.balance : 0"
+              :max="selectedCard ? selectedCard.balance : 0"
             >
           </div>
           
           <button 
             @click="transferMoney" 
-            :disabled="isLoading || !currentUserCard"
+            :disabled="isLoading || !selectedCard"
             class="transfer-button"
           >
             <span v-if="isLoading">Выполняется перевод...</span>
@@ -267,6 +318,33 @@ onMounted(() => {
     </div>
   </main>
 </template>
+
 <style scoped>
 @import "./transferMoney.scss";
+
+.card-select {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+.user-card-info {
+  background: #f5f5f5;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.user-card-info h3 {
+  margin-top: 0;
+  color: #333;
+}
+
+.user-card-info p {
+  margin: 5px 0;
+  color: #555;
+}
 </style>

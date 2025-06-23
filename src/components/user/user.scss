@@ -1,11 +1,17 @@
 .user__content {
+  padding: 20px;
 
-  &__total {
-    display: flex;
-    margin: 5px 15px;
-  }
   &__cards {
     display: flex;
-    gap: 30px;
+
+    &__total {
+      display: flex;
+      flex-wrap: wrap;
+
+      padding-left: 50px;
+    }
+  }
+  &__history {
+    padding-top: 20px;
   }
 }
