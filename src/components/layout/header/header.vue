@@ -55,12 +55,12 @@ const logout = async () => {
       </div> -->
       <router-link to="/user" class="header__content__cabinet">
         <button>
-          <img src="../../../../public/header/notifications.svg" alt="кабинет">
+          <img src="../../../../public/login.svg" alt="кабинет">
         </button>
       </router-link>
       <div class="header__content__cabinet">
         <button @click="logout">
-          <img src="../../../../public/header/notifications.svg" alt="Выход">
+          <img id="logout" src="../../../../public/login.svg" alt="Выход">
         </button>
       </div>
     </div>
@@ -69,4 +69,8 @@ const logout = async () => {
 
 <style scoped>
 @import "./header.scss";
+
+#logout {
+  rotate: 180deg;
+}
 </style>
