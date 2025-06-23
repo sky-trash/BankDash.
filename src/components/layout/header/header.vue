@@ -48,19 +48,19 @@ const logout = async () => {
           <img src="../../../../public/header/settings.svg" alt="">
         </button>
       </router-link>
-      <div class="header__content__notifications">
+      <!-- <div class="header__content__notifications">
         <button>
           <img src="../../../../public/header/notifications.svg" alt="">
         </button>
-      </div>
+      </div> -->
       <router-link to="/user" class="header__content__cabinet">
         <button>
-          <img src="" alt="кабинет">
+          <img src="../../../../public/header/notifications.svg" alt="кабинет">
         </button>
       </router-link>
       <div class="header__content__cabinet">
         <button @click="logout">
-          <img src="" alt="Выход">
+          <img src="../../../../public/header/notifications.svg" alt="Выход">
         </button>
       </div>
     </div>
