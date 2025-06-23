@@ -5,4 +5,11 @@
     display: flex;
     gap: 20px;
   }
+  &__button {
+    display: flex;
+    margin:  0 0 0 -15px;
+  }
+  &__settings {
+    display: flex;
+  }
 }
