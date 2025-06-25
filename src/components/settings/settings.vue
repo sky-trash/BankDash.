@@ -99,7 +99,7 @@ const loadUserProfile = async () => {
         country: userData.country || 'Russia',
         phoneNumber: userData.phoneNumber || ''
       }
-      
+
       // Форматируем номер телефона при загрузке для отображения
       if (profileData.value.phoneNumber) {
         const digits = profileData.value.phoneNumber.replace(/\D/g, '')
@@ -121,29 +121,64 @@ const loadUserProfile = async () => {
 
 const formatPhoneNumber = (e: Event) => {
   const target = e.target as HTMLInputElement
-  const input = target.value.replace(/\D/g, '')
-  const cursorPosition = target.selectionStart || 0
+  const originalCursorPos = target.selectionStart || 0
+  const originalValue = target.value
 
-  // Сохраняем номер без пробелов
-  profileData.value.phoneNumber = input.length > 11 ? input.substring(0, 11) : input
+  // Получаем только цифры из введенного значения
+  const digitsOnly = target.value.replace(/\D/g, '')
+
+  // Сохраняем только цифры (без пробелов) в хранилище
+  profileData.value.phoneNumber = digitsOnly.length > 11 ? digitsOnly.substring(0, 11) : digitsOnly
 
   // Форматируем для отображения
-  let formatted = ''
-  if (input.length > 0) {
-    formatted = input[0]
-    if (input.length > 1) formatted += ' ' + input.substring(1, 4)
-    if (input.length > 4) formatted += ' ' + input.substring(4, 7)
-    if (input.length > 7) formatted += ' ' + input.substring(7, 9)
-    if (input.length > 9) formatted += ' ' + input.substring(9, 11)
+  let formattedValue = ''
+  if (digitsOnly.length > 0) {
+    formattedValue = digitsOnly[0]
+    if (digitsOnly.length > 1) formattedValue += ' ' + digitsOnly.substring(1, 4)
+    if (digitsOnly.length > 4) formattedValue += ' ' + digitsOnly.substring(4, 7)
+    if (digitsOnly.length > 7) formattedValue += ' ' + digitsOnly.substring(7, 9)
+    if (digitsOnly.length > 9) formattedValue += ' ' + digitsOnly.substring(9, 11)
   }
 
-  formattedPhoneNumber.value = formatted
+  // Обновляем отображаемое значение
+  formattedPhoneNumber.value = formattedValue
 
-  // Восстановление позиции курсора
+  // Корректируем позицию курсора
   nextTick(() => {
-    const newCursorPosition = cursorPosition + (formatted.length - target.value.length)
-    target.setSelectionRange(newCursorPosition, newCursorPosition)
+    let newCursorPos = originalCursorPos
+
+    // Если добавляем цифру
+    if (formattedValue.length > originalValue.length) {
+      // Пропускаем позиции пробелов
+      if (formattedValue[newCursorPos] === ' ') {
+        newCursorPos++
+      }
+    }
+    // Если удаляем цифру
+    else if (formattedValue.length < originalValue.length) {
+      // Если удалили пробел, перемещаем курсор назад
+      if (originalValue[originalCursorPos - 1] === ' ') {
+        newCursorPos--
+      }
+    }
+
+    // Ограничиваем позицию курсора
+    newCursorPos = Math.min(newCursorPos, formattedValue.length)
+
+    target.setSelectionRange(newCursorPos, newCursorPos)
   })
+}
+
+const handleBackspace = (e: KeyboardEvent) => {
+  const target = e.target as HTMLInputElement
+  const cursorPos = target.selectionStart || 0
+
+  // Если перед курсором пробел, пропускаем его
+  if (target.value[cursorPos - 1] === ' ') {
+    e.preventDefault()
+    target.setSelectionRange(cursorPos - 1, cursorPos - 1)
+    target.dispatchEvent(new Event('input'))
+  }
 }
 
 const handleReauthentication = async () => {
@@ -184,7 +219,7 @@ const saveProfileChanges = async () => {
       city: profileData.value.city,
       postalCode: profileData.value.postalCode,
       country: profileData.value.country,
-      phoneNumber: profileData.value.phoneNumber, 
+      phoneNumber: profileData.value.phoneNumber,
       lastUpdated: new Date()
     }, { merge: true })
 
@@ -236,12 +271,7 @@ const togglePasswordVisibility = () => {
           {{ errorMessage }}
         </div>
         <div class="settingsProfile__tabs">
-          <div 
-            v-for="tab in tabs" 
-            :key="tab.id" 
-            :class="{ active: activeTab === tab.id }" 
-            @click="activeTab = tab.id"
-          >
+          <div v-for="tab in tabs" :key="tab.id" :class="{ active: activeTab === tab.id }" @click="activeTab = tab.id">
             <h1>{{ tab.label }}</h1>
           </div>
         </div>
@@ -306,13 +336,8 @@ const togglePasswordVisibility = () => {
                 </div>
                 <div class="form-group">
                   <h1>Номер телефона:</h1>
-                  <input 
-                    v-model="formattedPhoneNumber" 
-                    @input="formatPhoneNumber" 
-                    type="tel"
-                    placeholder="8 9XX XXX XX XX"
-                    maxlength="15"
-                  >
+                  <input v-model="formattedPhoneNumber" @input="formatPhoneNumber" @keydown.delete="handleBackspace"
+                    type="tel" placeholder="8 XXX XXX XX XX" maxlength="15" ref="phoneInput">
                 </div>
               </div>
               <div class="settingsProfile__edit__content__button">
@@ -331,13 +356,9 @@ const togglePasswordVisibility = () => {
       <div class="modal-content">
         <h3>Требуется подтверждение</h3>
         <p>Для изменения важных данных введите ваш текущий пароль:</p>
-        
-        <input 
-          v-model="reauthPassword" 
-          type="password" 
-          placeholder="Текущий пароль"
-        >
-        
+
+        <input v-model="reauthPassword" type="password" placeholder="Текущий пароль">
+
         <div class="modal-actions">
           <button @click="showReauthModal = false">
             Отмена
