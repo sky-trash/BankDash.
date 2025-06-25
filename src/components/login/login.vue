@@ -15,7 +15,7 @@ const handleLogin = async () => {
   loading.value = true // Активируем состояние загрузки
   
   try {
-    // Проверяем, что email содержит @ (базовая валидация)
+    // Проверяем, что email содержит @ 
     if (!email.value.includes('@')) {
       throw new Error('Введите корректный email адрес')
     }
@@ -27,26 +27,26 @@ const handleLogin = async () => {
     
     // Более понятные сообщения об ошибках для пользователя
     switch (err.code) {
-      case 'auth/invalid-email':
+      case 'Неверный формат email':
         error.value = 'Неверный формат email'
         break
-      case 'auth/user-disabled':
+      case 'Аккаунт заблокирован':
         error.value = 'Аккаунт заблокирован'
         break
-      case 'auth/user-not-found':
+      case 'Пользователь с таким email не найден':
         error.value = 'Пользователь с таким email не найден'
         break
-      case 'auth/wrong-password':
+      case 'Неверный пароль':
         error.value = 'Неверный пароль'
         break
-      case 'auth/too-many-requests':
+      case 'Слишком много попыток. Попробуйте позже':
         error.value = 'Слишком много попыток. Попробуйте позже'
         break
       default:
         error.value = err.message || 'Ошибка при входе. Попробуйте снова'
     }
   } finally {
-    loading.value = false // Выключаем состояние загрузки в любом случае
+    loading.value = false 
   }
 }
 </script>

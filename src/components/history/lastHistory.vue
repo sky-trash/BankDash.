@@ -23,11 +23,13 @@ const error = ref('');
 const fetchLastTransactions = async () => {
   try {
     loading.value = true;
+    error.value = '';
     const auth = getAuth();
     const user = auth.currentUser;
 
     if (!user) {
       error.value = 'Пользователь не авторизован';
+      loading.value = false;
       return;
     }
 
@@ -35,27 +37,35 @@ const fetchLastTransactions = async () => {
     const q = query(
       transactionsRef,
       where('userId', '==', user.uid),
+      orderBy('date', 'desc'),
+      limit(3)
     );
 
     const querySnapshot = await getDocs(q);
     transactions.value = querySnapshot.docs.map(doc => ({
       id: doc.id,
       ...doc.data()
-    })) as Transaction[];
-  } catch (err: any) {
-    if (err.code === 'failed-precondition') {
-      error.value = 'Необходимо создать индекс в Firebase.';
-      console.error('Ссылка для создания индекса:', err.message.match(/https?:\/\/[^\s]+/)[0]);
+    } as Transaction));
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      if (err.message.includes('index')) {
+        error.value = 'Необходимо создать индекс в Firebase.';
+        const urlMatch = err.message.match(/https?:\/\/[^\s]+/);
+        if (urlMatch) {
+          console.error('Ссылка для создания индекса:', urlMatch[0]);
+        }
+      } else {
+        error.value = 'Ошибка при загрузке транзакций: ' + err.message;
+      }
+      console.error(err);
     } else {
-      error.value = 'Ошибка при загрузке транзакций: ' + err.message;
+      error.value = 'Неизвестная ошибка при загрузке транзакций';
+      console.error(err);
     }
-    console.error(err);
   } finally {
     loading.value = false;
   }
 };
-
-
 
 onMounted(() => {
   fetchLastTransactions();
@@ -67,7 +77,9 @@ onMounted(() => {
     <div v-if="loading">Загрузка...</div>
     <div v-else-if="error" class="error">
       {{ error }}
-      <a v-if="error.includes('индекс')" :href="error.match(/https?:\/\/[^\s]+/)?.[0]" target="_blank">
+      <a v-if="error.includes('индекс') && error.match(/https?:\/\/[^\s]+/)?.[0]" 
+         :href="error.match(/https?:\/\/[^\s]+/)?.[0]" 
+         target="_blank">
         Создать индекс
       </a>
     </div>
@@ -79,10 +91,18 @@ onMounted(() => {
           <div class="transaction-info">
             <div><strong>Сумма:</strong> {{ transaction.amount }}</div>
             <div><strong>Дата:</strong> {{ new Date(transaction.date).toLocaleString() }}</div>
-            <div><strong>От карты:</strong> **** **** **** {{ transaction.fromCard.slice(-4) }}</div>
-            <div><strong>На карту:</strong> **** **** **** {{ transaction.toCard.slice(-4) }}</div>
+            <div v-if="transaction.fromCard">
+              <strong>От карты:</strong> **** **** **** {{ transaction.fromCard.slice(-4) }}
+            </div>
+            <div v-if="transaction.toCard">
+              <strong>На карту:</strong> **** **** **** {{ transaction.toCard.slice(-4) }}
+            </div>
             <div><strong>Тип:</strong> {{ transaction.type === 'outgoing' ? 'Отправка' : 'Получение' }}</div>
-            <div><strong>Статус:</strong> {{ transaction.status === 'completed' ? 'Завершено' : transaction.status }}
+            <div>
+              <strong>Статус:</strong> 
+              {{ transaction.status === 'completed' ? 'Завершено' : 
+                 transaction.status === 'pending' ? 'В обработке' : 
+                 transaction.status }}
             </div>
           </div>
         </li>
@@ -104,11 +124,10 @@ onMounted(() => {
 }
 
 .transaction-item {
-  background: #f5f5f5;
-  border-radius: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
   padding: 15px;
-  margin-bottom: 15px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 10px;
 }
 
 .transaction-info div {
@@ -126,6 +145,7 @@ onMounted(() => {
   margin-left: 5px;
 }
 </style>
+
 <style scoped>
 @import "./lastHistory.scss";
 </style>
