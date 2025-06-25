@@ -9,15 +9,14 @@ const router = useRouter()
 const email = ref('')
 const password = ref('')
 const confirmPassword = ref('')
-const firstName = ref('') // Имя
-const lastName = ref('') // Фамилия
-const middleName = ref('') // Отчество
+const firstName = ref('')
+const lastName = ref('')
+const middleName = ref('')
 const username = ref('')
 const dob = ref('')
 const loading = ref(false)
 const error = ref('')
 
-// Вычисляем возраст на основе даты рождения
 const age = computed(() => {
   if (!dob.value) return 0
   const birthDate = new Date(dob.value)
@@ -66,7 +65,6 @@ const generateValidThru = () => {
 
 const handleRegister = async () => {
   try {
-    // Валидация
     if (password.value !== confirmPassword.value) {
       throw new Error('Пароли не совпадают')
     }
@@ -82,7 +80,7 @@ const handleRegister = async () => {
     loading.value = true
     error.value = ''
     
-    // 1. Создаем пользователя в Firebase Auth
+    // Создаем пользователя
     const userCredential = await createUserWithEmailAndPassword(
       auth, 
       email.value, 
@@ -94,12 +92,12 @@ const handleRegister = async () => {
       throw err
     })
     
-    // 2. Обновляем профиль пользователя
+    // Обновляем профиль
     await updateProfile(userCredential.user, {
       displayName: `${lastName.value} ${firstName.value} ${middleName.value}`.trim()
     })
     
-    // 3. Создаем документ пользователя в коллекции users
+    // Сохраняем данные пользователя
     const userData = {
       uid: userCredential.user.uid,
       email: email.value,
@@ -115,7 +113,7 @@ const handleRegister = async () => {
     
     await setDoc(doc(db, 'users', userCredential.user.uid), userData)
     
-    // 4. Создаем карту в коллекции cards
+    // Создаем карту
     const cardHolderName = `${transliterate(lastName.value)} ${transliterate(firstName.value)}`.toUpperCase()
     
     const cardData = {
@@ -134,8 +132,8 @@ const handleRegister = async () => {
     
     await setDoc(doc(db, 'cards', userCredential.user.uid), cardData)
     
-    // 5. Перенаправляем
-    router.push('/index')
+    // Явное перенаправление после успешной регистрации
+    await router.push('/index')
     
   } catch (err) {
     error.value = err.message || 'Ошибка регистрации'
