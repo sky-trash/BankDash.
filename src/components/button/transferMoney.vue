@@ -204,7 +204,8 @@ const transferMoney = async () => {
         toUser: recipientCard.userId,
         date: new Date(),
         userId: auth.currentUser.uid,
-        status: 'completed'
+        status: 'completed',
+        userName: `${recipientUserData.firstName} ${recipientUserData.lastName}`
       });
 
       transaction.set(doc(transactionsRef), {
@@ -217,7 +218,8 @@ const transferMoney = async () => {
         toCollection: recipientCollection,
         date: new Date(),
         userId: recipientCard.userId,
-        status: 'completed'
+        status: 'completed',
+        userName: `${recipientUserData.firstName} ${recipientUserData.lastName}`
       });
     });
 

@@ -21,11 +21,12 @@ const transactions = ref<Transaction[]>([]);
 const visibleTransactions = ref<Transaction[]>([]);
 const loading = ref(true);
 const error = ref('');
+const showCount = ref(10);
 const activeFilter = ref<'all' | 'outgoing' | 'incoming'>('all');
 
 const filteredTransactions = computed(() => {
-  if (activeFilter.value === 'all') return transactions.value.slice(0, 5);
-  return transactions.value.filter(t => t.type === activeFilter.value).slice(0, 5);
+  if (activeFilter.value === 'all') return transactions.value;
+  return transactions.value.filter(t => t.type === activeFilter.value);
 });
 
 const fetchLastTransactions = async () => {
@@ -78,6 +79,7 @@ const fetchLastTransactions = async () => {
 
 const applyFilter = (filter: 'all' | 'outgoing' | 'incoming') => {
   activeFilter.value = filter;
+  showCount.value = 10;
   updateVisibleTransactions();
 };
 
@@ -104,8 +106,13 @@ const formatDate = (date: any) => {
   }
 };
 
+const showMore = () => {
+  showCount.value += 10;
+  updateVisibleTransactions();
+};
+
 const updateVisibleTransactions = () => {
-  visibleTransactions.value = filteredTransactions.value;
+  visibleTransactions.value = filteredTransactions.value.slice(0, showCount.value);
 };
 
 onMounted(() => {
@@ -126,7 +133,7 @@ onMounted(() => {
     <div v-else>
       <div class="lastHistory__header">
         <div class="lastHistory__header__text">
-          <h1>Последние транзакции</h1>
+          <h1>История транзакции</h1>
         </div>
         <div class="lastHistory__header__filters">
           <button 
@@ -193,6 +200,12 @@ onMounted(() => {
               </h1>
             </div>
           </div>
+
+          <div v-if="filteredTransactions.length > visibleTransactions.length" class="lastHistory__content__show">
+            <button class="lastHistory__content__show__button" @click="showMore">
+              <p>Показать еще</p>
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -201,4 +214,8 @@ onMounted(() => {
 
 <style scoped>
 @import "./lastHistory.scss";
+
+.error {
+  color: red;
+}
 </style>

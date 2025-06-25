@@ -1,9 +1,12 @@
 .lastHistory {
 
-  &__content {
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
 
     &__text {
-
       h1 {
         font-family: var(--font-family);
         font-weight: 600;
@@ -11,70 +14,109 @@
         color: #333b69;
       }
     }
-    &__cards {
+    &__filters {
+      display: flex;
+      gap: 10px;
+
+      &__button {
+        background-color: #007AFF;
+        color: white;
+        border: none;
+        border-radius: 10px;
+        padding: 8px 16px;
+        font-size: 14px;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+      &__button:hover {
+        background-color: #0062CC;
+      }
+      &__button.active-filter {
+        background-color: white;
+        color: #007AFF;
+        border: 1px solid #007AFF;
+      }
+    }
+  }
+
+  &__content {
+    &__card {
       margin: 20px 0;
       background: #fff;
       border-radius: 25px;
+      display: flex;
+      padding: 15px;
+      justify-content: space-between;
+      align-items: center;
 
-      &__info {
-        padding: 10px 25px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-
-        &__text {
-
-          h1 {
-            font-family: var(--font-family);
-            font-weight: 500;
-            font-size: 16px;
-            color: #232323;
-          }
-          p {
-            font-family: var(--font-family);
-            font-weight: 400;
-            font-size: 15px;
-            color: #718ebf;
-
-            padding-top: 7px
-          }
+      &__date {
+        h1 {
+          font-family: var(--font-family);
+          font-weight: 400;
+          font-size: 16px;
+          color: #718ebf;
         }
-        &__transfer {
-
-          p {
-            font-family: var(--font-family);
-            font-weight: 400;
-            font-size: 16px;
-            color: #718ebf;
-          }
+      }
+      &__type {
+        h1 {
+          font-family: var(--font-family);
+          font-weight: 400;
+          font-size: 16px;
+          color: #718ebf;
         }
-        &__number {
-
-          p {
-            font-family: var(--font-family);
-            font-weight: 400;
-            font-size: 16px;
-            color: #718ebf;
-          }
+      }
+      &__number {
+        h1 {
+          font-family: var(--font-family);
+          font-weight: 400;
+          font-size: 16px;
+          color: #718ebf;
         }
-        &__status {
-
-          p {
-            font-family: var(--font-family);
-            font-weight: 400;
-            font-size: 16px;
-            color: #718ebf;
-          }
+      }
+      &__status {
+        h1 {
+          font-family: var(--font-family);
+          font-weight: 400;
+          font-size: 16px;
+          color: #718ebf;
         }
-        &__money {
-
-          p {
-            font-family: var(--font-family);
-            font-weight: 400;
-            font-size: 16px;
-            color: #718ebf;
-          }
+      }
+      &__money {
+        h1 {
+          font-family: var(--font-family);
+          font-weight: 500;
+          font-size: 16px;
+          text-align: right;
         }
+        .money-outgoing {
+          color: #FF3B30; /* Красный для отправлений */
+        }
+        
+        .money-incoming {
+          color: #34C759; /* Зеленый для получений */
+        }
+      }
+    }
+    &__show {
+      display: flex;
+      justify-content: center;
+      margin-top: 20px;
+    
+      &__button {
+        background-color: #007AFF;
+        color: white;
+        border: none;
+        border-radius: 10px;
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.2s;
+      }
+      &__button:hover {
+        background-color: #0657ae;
+      }
+      &__button:active {
+        background-color: #004999;
       }
     }
   }

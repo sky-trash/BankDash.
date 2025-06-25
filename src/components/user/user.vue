@@ -4,7 +4,7 @@ import Header from "../layout/header/header.vue"
 import Balanse from "../total/balanse.vue"
 import Expense from "../total/expense.vue"
 import Income from "../total/income.vue"
-import LastHistory from "../history/lastHistory.vue"
+import History from "../history/history.vue"
 import Cards from "../cards/cards.vue"
 </script>
 
@@ -23,7 +23,7 @@ import Cards from "../cards/cards.vue"
           </div>
         </div>
         <div class="user__content__history">
-          <LastHistory />
+          <History />
         </div>
       </main>
     </div>
