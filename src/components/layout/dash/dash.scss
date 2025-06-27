@@ -70,3 +70,77 @@
     }
   }
 }
+
+@media (max-width: 1024px) {
+  .dash {
+    width: 200px;
+
+    &__logo {
+      padding: 25px 15px 20px 30px;
+    }
+    
+    &__nav {
+      padding: 25px 0 0;
+      
+      &__link {
+        padding: 0 0 30px 30px;
+        
+        h1 {
+          font-size: 16px;
+          padding-left: 20px;
+        }
+        
+        &:hover,
+        &.is-active {
+          h1 {
+            padding-left: 25px;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 375px) {
+  .dash {
+    width: 60px;
+    overflow: hidden;
+    transition: width 0.3s ease;
+    
+    &:hover {
+      width: 200px;
+    }
+    
+    &__logo {
+      padding: 20px 10px;
+      justify-content: center;
+    }
+    
+    &__nav {
+      padding: 20px 0 0;
+      
+      &__link {
+        padding: 0 0 25px 0;
+        justify-content: center;
+        
+        h1 {
+          display: none;
+          padding-left: 15px;
+          white-space: nowrap;
+        }
+        
+        &:hover,
+        &.is-active {
+          h1 {
+            display: block;
+            padding-left: 20px;
+          }
+        }
+      }
+    }
+    
+    &:hover &__nav__link h1 {
+      display: block;
+    }
+  }
+}
